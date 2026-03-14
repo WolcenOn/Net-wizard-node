@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NetWizard Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#05080f;--s1:#0a0f1a;--s2:#101624;--s3:#161e2e;--s4:#1c2840;
+  --b1:#233042;--b2:#2d3f58;--b3:#3a526e;
+  --t1:#d8e8f8;--t2:#6e90b8;--t3:#3a5470;--t4:#1e3050;
+  --ac:#00c8f0;--acg:rgba(0,200,240,.12);
+  --gn:#00d98a;--gng:rgba(0,217,138,.1);
+  --yw:#f0c030;--ywg:rgba(240,192,48,.1);
+  --rd:#f04060;--rdg:rgba(240,64,96,.1);
+  --or:#f07030;--org:rgba(240,112,48,.1);
+  --pu:#9070f0;--pug:rgba(144,112,240,.1);
+  --f1:'DM Sans',system-ui,sans-serif;
+  --f2:'JetBrains Mono',monospace;
+  --PW:340px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:var(--f1);color:var(--t1);font-size:13px;line-height:1.5;}
+
+/* TOP */
+.top{position:fixed;inset:0 0 auto 0;height:46px;z-index:600;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;}
+.logo{display:flex;align-items:center;gap:7px;padding:0 14px;font-size:14px;font-weight:700;color:var(--ac);border-right:1px solid var(--b1);height:100%;flex-shrink:0;white-space:nowrap;}
+.logo svg{width:20px;height:20px;}
+.pname{background:none;border:none;color:var(--t2);font-family:var(--f1);font-size:12px;padding:0 10px;flex:1;outline:none;min-width:0;}
+.pname::placeholder{color:var(--t4);}
+.sv{font-size:11px;color:var(--gn);opacity:0;transition:.3s;padding:0 6px;flex-shrink:0;}
+.sv.on{opacity:1;}
+.top-r{display:flex;border-left:1px solid var(--b1);flex-shrink:0;}
+.ti{height:46px;padding:0 10px;background:none;border:none;border-right:1px solid var(--b1);color:var(--t2);cursor:pointer;font-family:var(--f1);font-size:11.5px;font-weight:500;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:.12s;}
+.ti:hover{background:var(--s2);color:var(--t1);}
+.ti.danger:hover{background:var(--rdg);color:var(--rd);}
+
+/* TOOLS */
+.tbar{position:fixed;left:0;top:46px;bottom:0;width:48px;z-index:500;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;align-items:center;padding:7px 0;gap:2px;}
+.tt{width:34px;height:34px;border-radius:7px;background:none;border:1px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--t3);font-size:8px;font-weight:600;transition:.12s;}
+.tt .ic{font-size:14px;line-height:1;}
+.tt:hover{background:var(--s2);color:var(--t2);}
+.tt.on{background:var(--acg);border-color:rgba(0,200,240,.3);color:var(--ac);}
+.tt-sep{width:20px;height:1px;background:var(--b1);margin:3px 0;}
+
+/* CANVAS */
+.cw{position:fixed;top:46px;left:48px;right:var(--PW);bottom:0;overflow:hidden;background:var(--bg);}
+#cv{display:block;width:100%;height:100%;}
+
+/* PANEL */
+.panel{position:fixed;top:46px;right:0;bottom:0;width:var(--PW);background:var(--s1);border-left:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;}
+.ph{padding:10px 13px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:6px;min-height:42px;flex-shrink:0;}
+.ph h2{font-size:13px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pb{flex:1;overflow-y:auto;padding:11px 13px 72px;}
+.pf{position:absolute;bottom:0;left:0;right:0;padding:8px 13px;border-top:1px solid var(--b1);background:var(--s1);display:flex;gap:6px;}
+
+/* FORMS */
+.fl{display:block;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;margin-top:8px;}
+.fl:first-child{margin-top:0;}
+input,select,textarea{width:100%;padding:6px 8px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;color:var(--t1);font-family:var(--f1);font-size:12px;outline:none;transition:.12s;}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);}
+textarea{font-family:var(--f2);font-size:10px;line-height:1.6;resize:vertical;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M0 0l4.5 5L9 0' stroke='%233a5470' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;padding-right:24px;-webkit-appearance:none;}
+input[type=color]{height:32px;padding:2px;cursor:pointer;}
+.row{display:flex;gap:6px;}
+.row>*{flex:1;min-width:0;}
+.note{font-size:10.5px;color:var(--t3);margin-top:3px;line-height:1.4;}
+.note.ok{color:var(--gn);}
+.note.err{color:var(--rd);}
+.sep{border:none;border-top:1px solid var(--b1);margin:9px 0;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:6px 10px;border-radius:6px;border:none;cursor:pointer;font-family:var(--f1);font-size:11.5px;font-weight:600;transition:.12s;min-height:30px;white-space:nowrap;}
+.bp{background:var(--ac);color:#000;}.bp:hover{filter:brightness(1.12);}
+.bs{background:var(--s2);color:var(--t1);border:1px solid var(--b1);}.bs:hover{background:var(--s3);}
+.bd{background:var(--rdg);color:var(--rd);border:1px solid rgba(240,64,96,.2);}.bd:hover{background:var(--rd);color:#fff;}
+.bg{background:var(--gng);color:var(--gn);border:1px solid rgba(0,217,138,.2);}.bg:hover{background:var(--gn);color:#000;}
+.by{background:var(--ywg);color:var(--yw);border:1px solid rgba(240,192,48,.2);}
+.bsm{padding:4px 8px;font-size:11px;min-height:26px;}
+.bxs{padding:2px 6px;font-size:10px;min-height:22px;border-radius:5px;}
+.bfull{width:100%;}
+
+/* BADGES */
+.b{display:inline-flex;align-items:center;padding:2px 6px;border-radius:999px;font-size:9.5px;font-weight:700;}
+.bac{background:var(--acg);color:var(--ac);}
+.bgn{background:var(--gng);color:var(--gn);}
+.byw{background:var(--ywg);color:var(--yw);}
+.brd{background:var(--rdg);color:var(--rd);}
+.bgr{background:var(--s3);color:var(--t2);}
+.bpu{background:var(--pug);color:var(--pu);}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--b1);margin-bottom:9px;overflow-x:auto;}
+.tab{padding:5px 9px;font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--t3);white-space:nowrap;transition:.12s;}
+.tab:hover{color:var(--t2);}
+.tab.on{border-bottom-color:var(--ac);color:var(--ac);}
+.tc{display:none;}.tc.on{display:block;}
+
+/* ROWS */
+.lrow{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:6px;background:var(--s2);border:1px solid var(--b1);margin-bottom:4px;cursor:pointer;transition:.12s;}
+.lrow:hover,.lrow.sel{border-color:var(--ac);}
+.lrow.sel{background:var(--acg);}
+.lico{font-size:14px;flex-shrink:0;width:18px;text-align:center;}
+.linf{flex:1;min-width:0;}
+.lnm{font-weight:600;font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lsb{font-size:10px;color:var(--t2);}
+
+/* CODE */
+.codeblk{background:#020407;border:1px solid var(--b1);border-radius:7px;padding:9px;font-family:var(--f2);font-size:9.5px;line-height:1.65;color:#50e090;overflow:auto;max-height:260px;}
+.codehd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.codehd span{font-size:10.5px;font-weight:600;color:var(--t2);}
+
+/* VENDOR PILLS */
+.vps{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
+.vp{padding:3px 7px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--b1);background:var(--s2);color:var(--t3);transition:.12s;}
+.vp:hover{color:var(--t1);}
+.vp.on{background:var(--ac);color:#000;border-color:var(--ac);}
+
+/* FW ROW */
+.fwr{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:5px;background:var(--s2);border:1px solid var(--b1);margin-bottom:3px;font-size:11px;}
+.fwd{opacity:.4;}
+
+/* INFO CALLOUT */
+.co{padding:7px 10px;border-radius:7px;font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:7px;}
+.co-a{background:var(--acg);border:1px solid rgba(0,200,240,.15);}
+.co-g{background:var(--gng);border:1px solid rgba(0,217,138,.15);}
+.co-y{background:var(--ywg);border:1px solid rgba(240,192,48,.15);}
+.co b{color:var(--t1);}
+
+/* CANVAS HINT */
+.cvh{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(5,8,15,.93);border:1px solid var(--b1);border-radius:16px;padding:5px 12px;font-size:10.5px;color:var(--t2);pointer-events:none;white-space:nowrap;}
+
+/* MODAL */
+.mbk{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:800;padding:10px;}
+.mbk.on{display:flex;}
+.modal{width:min(520px,100%);background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:14px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.8);}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.mh h3{font-size:13px;font-weight:700;}
+.mft{display:flex;gap:6px;margin-top:11px;}
+
+/* IP BAR */
+.ipbar{height:12px;border-radius:4px;overflow:hidden;display:flex;background:var(--s3);margin:4px 0;}
+.ibs{height:100%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;}
+
+/* STATS */
+.mstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:9px;}
+.ms{background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:8px;border-top:2px solid;}
+.msv{font-size:18px;font-weight:700;}
+.msl{font-size:9.5px;color:var(--t3);margin-top:1px;}
+
+.empty{text-align:center;padding:18px 8px;color:var(--t4);}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px;}
+@media(max-width:800px){:root{--PW:100%;}
+  .cw{right:0;bottom:200px;}
+  .panel{top:auto;height:200px;left:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="top">
+  <div class="logo">
+    <svg viewBox="0 0 20 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="1" y="1" width="18" height="3.5" rx="1"/><rect x="1" y="7" width="6" height="3" rx="1"/>
+      <rect x="13" y="7" width="6" height="3" rx="1"/><line x1="4" y1="13" x2="4" y2="10"/>
+      <line x1="16" y1="13" x2="16" y2="10"/><rect x="1.5" y="13" width="5" height="2.5" rx=".7"/>
+      <rect x="13.5" y="13" width="5" height="2.5" rx=".7"/>
+    </svg>NetWizard
+  </div>
+  <input class="pname" id="pname" placeholder="Nombre del proyecto…"/>
+  <div class="sv" id="sv">✓ guardado</div>
+  <div class="top-r">
+    <button class="ti" id="btnLoc">📍 Ubicación</button>
+    <button class="ti" id="btnDev">🖥 Dispositivo</button>
+    <button class="ti" id="btnHost">💻 Host</button>
+    <button class="ti" id="btnVlan">🏷 VLAN</button>
+    <button class="ti" id="btnSnAuto">⚡ Subnets</button>
+    <button class="ti" id="btnExpAll">⬇ Exportar</button>
+    <button class="ti danger" id="btnNew">🗑</button>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<nav class="tbar">
+  <button class="tt on" id="tSel"><span class="ic">↖</span>Sel</button>
+  <button class="tt" id="tPan"><span class="ic">✋</span>Pan</button>
+  <div class="tt-sep"></div>
+  <button class="tt" id="tLnk"><span class="ic">⟺</span>Link</button>
+  <div class="tt-sep"></div>
+  <button class="tt" id="tZI"><span class="ic">＋</span>Zoom</button>
+  <button class="tt" id="tZO"><span class="ic">－</span>Zoom</button>
+  <button class="tt" id="tFit"><span class="ic">⊞</span>Fit</button>
+  <div class="tt-sep"></div>
+  <button class="tt" id="tDel"><span class="ic">✕</span>Del</button>
+</nav>
+
+<div class="cw" id="cw"><canvas id="cv"></canvas><div class="cvh" id="cvh" style="display:none;"></div></div>
+
+<!-- PANEL -->
+<aside class="panel"><div class="ph"><h2 id="ptitle">NetWizard Pro</h2><span class="b bac" id="pbadge" style="display:none;"></span><button class="btn bs bsm" id="pclose" style="display:none;">✕</button></div><div class="pb" id="pb"></div><div class="pf" id="pf" style="display:none;"></div></aside>
+
+<!-- MODAL: LOCATION -->
+<div class="mbk" id="mLoc"><div class="modal">
+  <div class="mh"><h3>📍 Nueva ubicación</h3><button class="btn bs bsm" onclick="cm('mLoc')">✕</button></div>
+  <div class="row"><div><label class="fl">Nombre</label><input id="lc_n" placeholder="Edificio A / CPD…"/></div>
+  <div><label class="fl">Tipo</label><select id="lc_t"><option value="building">🏢 Edificio</option><option value="floor">📐 Planta</option><option value="rack">🗄 Rack</option><option value="cloud">☁ Nube</option><option value="remote">🌍 Sede remota</option></select></div></div>
+  <div class="row"><div><label class="fl">Color</label><input type="color" id="lc_c" value="#0a2050" style="height:32px"/></div><div><label class="fl">Notas</label><input id="lc_o" placeholder="Descripción…"/></div></div>
+  <div class="mft"><button class="btn bs" onclick="cm('mLoc')">Cancelar</button><button class="btn bp" id="lok">📍 Colocar</button></div>
+</div></div>
+
+<!-- MODAL: DEVICE -->
+<div class="mbk" id="mDev"><div class="modal">
+  <div class="mh"><h3 id="md_t">🖥 Nuevo dispositivo</h3><button class="btn bs bsm" onclick="cm('mDev')">✕</button></div>
+  <div class="row"><div><label class="fl">Nombre</label><input id="d_n" placeholder="SW-CORE-01"/></div>
+  <div><label class="fl">Tipo</label><select id="d_ty"><option value="switch">⇄ Switch</option><option value="router">⬡ Router</option><option value="firewall">🛡 Firewall</option><option value="ap">📡 AP WiFi</option><option value="printer">🖨 Impresora</option><option value="camera">📷 Cámara IP</option><option value="phone">📞 Teléfono IP</option><option value="iot">🔌 IoT</option></select></div></div>
+  <div class="row"><div><label class="fl">Vendor/OS</label><select id="d_v"><option value="">— selecciona —</option><option value="cisco_ios">Cisco IOS</option><option value="cisco_asa">Cisco ASA</option><option value="juniper">Juniper Junos</option><option value="aruba">Aruba AOS-S</option><option value="pfsense">pfSense</option><option value="fortinet">FortiGate</option></select></div>
+  <div><label class="fl">IP gestión</label><input id="d_m" placeholder="10.0.99.1"/></div></div>
+  <div id="d_edge" style="display:none;"><div class="row"><div><label class="fl">Internet Edge</label><select id="d_ie"><option value="no">No</option><option value="yes">Sí (NAT)</option></select></div><div><label class="fl">Interfaz WAN</label><input id="d_wi" placeholder="GigabitEthernet0/0"/></div></div></div>
+  <label class="fl">Ubicación</label><select id="d_l"></select>
+  <label class="fl">Notas</label><input id="d_o" placeholder="Rack, modelo…"/>
+  <input type="hidden" id="d_id"/>
+  <div class="mft"><button class="btn bs" onclick="cm('mDev')">Cancelar</button><button class="btn bp" id="dok">➕ Añadir</button></div>
+</div></div>
+
+<!-- MODAL: HOST -->
+<div class="mbk" id="mHost"><div class="modal">
+  <div class="mh"><h3 id="mh_t">💻 Nuevo host</h3><button class="btn bs bsm" onclick="cm('mHost')">✕</button></div>
+  <div class="row"><div><label class="fl">Nombre</label><input id="h_n" placeholder="PC-Ventas-01"/></div>
+  <div><label class="fl">Sistema operativo</label><select id="h_os">
+    <option value="pc_win">🖥 PC Windows</option><option value="pc_linux">🐧 PC Linux</option>
+    <option value="lt_win">💻 Portátil Windows</option><option value="lt_linux">💻 Portátil Linux</option>
+    <option value="sv_win">🗄 Servidor Windows</option><option value="sv_linux">⚙ Servidor Linux</option>
+    <option value="mac">🍎 macOS</option><option value="other">📱 Otro/IoT</option>
+  </select></div></div>
+  <div class="row"><div><label class="fl">VLAN</label><select id="h_v"></select></div>
+  <div><label class="fl">IP</label><select id="h_im"><option value="dhcp">DHCP</option><option value="static">Estática</option><option value="auto">Auto (asignar)</option></select></div></div>
+  <div id="h_ssec" style="display:none;"><label class="fl">IP estática</label><input id="h_sip" placeholder="10.10.10.50"/><div class="note" id="h_sh"></div></div>
+  <div class="row"><div><label class="fl">Switch</label><select id="h_sw"></select></div><div><label class="fl">Puerto switch</label><input id="h_sp" placeholder="Gi0/1"/></div></div>
+  <div class="row"><div><label class="fl">MAC</label><input id="h_mac" placeholder="aa:bb:cc:dd:ee:ff"/></div><div><label class="fl">Ubicación</label><select id="h_l"></select></div></div>
+  <input type="hidden" id="h_id"/>
+  <div class="mft"><button class="btn bs" onclick="cm('mHost')">Cancelar</button><button class="btn bp" id="hok">➕ Añadir</button></div>
+</div></div>
+
+<!-- MODAL: VLAN -->
+<div class="mbk" id="mVlan"><div class="modal">
+  <div class="mh"><h3>🏷 Nueva VLAN</h3><button class="btn bs bsm" onclick="cm('mVlan')">✕</button></div>
+  <div class="row"><div><label class="fl">ID</label><input type="number" id="v_id" min="1" max="4094" placeholder="10"/></div><div><label class="fl">Nombre</label><input id="v_n" placeholder="Usuarios"/></div><div style="max-width:60px;"><label class="fl">Color</label><input type="color" id="v_c" value="#00c8f0" style="height:32px"/></div></div>
+  <div class="mft"><button class="btn bs" onclick="cm('mVlan')">Cancelar</button><button class="btn bp" id="vok">➕ Añadir</button></div>
+</div></div>
+
+<!-- MODAL: SUBNETS -->
+<div class="mbk" id="mSn"><div class="modal">
+  <div class="mh"><h3>⚡ Auto-subnetting</h3><button class="btn bs bsm" onclick="cm('mSn')">✕</button></div>
+  <div class="co co-a">Genera subnets automáticamente para cada VLAN y asigna IPs a los hosts.</div>
+  <div class="row"><div><label class="fl">Bloque base</label><input id="sn_b" value="10.10.0.0/16"/></div><div><label class="fl">Prefijo por VLAN</label><select id="sn_p"><option value="24">/24 — 254 hosts</option><option value="25">/25 — 126</option><option value="26">/26 — 62</option><option value="23">/23 — 510</option></select></div></div>
+  <div class="row"><div><label class="fl">Gateway</label><select id="sn_gw"><option value="first">Primera (.1)</option><option value="last">Última</option></select></div><div><label class="fl">Hosts desde offset</label><input type="number" id="sn_off" value="10" min="2" max="250"/></div></div>
+  <label style="display:flex;align-items:center;gap:7px;margin-top:9px;font-size:11.5px;color:var(--t2);cursor:pointer;"><input type="checkbox" id="sn_ah" checked style="width:auto"/> Asignar IPs automáticas a hosts sin IP</label>
+  <div id="sn_prev" style="font-size:10.5px;color:var(--t2);margin-top:8px;white-space:pre;font-family:var(--f2);max-height:120px;overflow:auto;"></div>
+  <div class="mft"><button class="btn bs" onclick="cm('mSn')">Cancelar</button><button class="btn bs" id="snprev">👁 Preview</button><button class="btn bp" id="snok">⚡ Aplicar</button></div>
+</div></div>
+
+<!-- MODAL: LINK -->
+<div class="mbk" id="mLnk"><div class="modal">
+  <div class="mh"><h3>🔗 Nuevo enlace</h3><button class="btn bs bsm" onclick="cm('mLnk')">✕</button></div>
+  <div class="row"><div><label class="fl">Origen</label><select id="lk_a"></select></div><div><label class="fl">Destino</label><select id="lk_b"></select></div></div>
+  <div class="row"><div><label class="fl">Tipo</label><select id="lk_t"><option value="eth">🔵 Ethernet</option><option value="fiber">🟡 Fibra óptica</option><option value="wan">🟠 WAN/Internet</option><option value="wifi">🔴 WiFi</option></select></div><div><label class="fl">Velocidad</label><select id="lk_s"><option value="100M">100 Mbps</option><option value="1G" selected>1 Gbps</option><option value="10G">10 Gbps</option><option value="100G">100 Gbps</option></select></div></div>
+  <label class="fl">Notas</label><input id="lk_n" placeholder="Uplink SW / Trunk / WAN ISP…"/>
+  <input type="hidden" id="lk_at"/><input type="hidden" id="lk_bt"/>
+  <div class="mft"><button class="btn bs" onclick="cm('mLnk')">Cancelar</button><button class="btn bp" id="lkok">🔗 Crear</button></div>
+</div></div>
+
+<script>
+
+'use strict';
+const SK='nwp5';
+const G=id=>document.getElementById(id);
+const esc=s=>(s??'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const uid=p=>p+Math.random().toString(36).slice(2,6)+Date.now().toString(36).slice(-4);
+
+// CONSTANTS
+const DICO={switch:'⇄',router:'⬡',firewall:'🛡',ap:'📡',printer:'🖨',camera:'📷',phone:'📞',iot:'🔌'};
+const HICO={pc_win:'🖥',pc_linux:'🐧',lt_win:'💻',lt_linux:'💻',sv_win:'🗄',sv_linux:'⚙',mac:'🍎',other:'📱'};
+const HLBL={pc_win:'PC Windows',pc_linux:'PC Linux',lt_win:'Portátil Win',lt_linux:'Portátil Linux',sv_win:'Servidor Win',sv_linux:'Servidor Linux',mac:'macOS',other:'Otro/IoT'};
+const TICO={building:'🏢',floor:'📐',rack:'🗄',cloud:'☁',remote:'🌍'};
+const LCOLS={eth:'#00c8f0',fiber:'#f0c030',wan:'#f07030',wifi:'#9070f0'};
+const VCOLS=['#00c8f0','#00d98a','#f0c030','#f04060','#9070f0','#f07030','#38b8f8','#e070f0'];
+
+const ALL_VFMTS=[
+  {id:'cisco_ios',l:'Cisco IOS'},{id:'cisco_asa',l:'Cisco ASA'},
+  {id:'juniper',l:'Juniper'},{id:'aruba',l:'Aruba AOS-S'},
+  {id:'pfsense',l:'pfSense'},{id:'fortinet',l:'FortiGate'},
+  {id:'win_ps',l:'Windows PS'},{id:'linux_sh',l:'Linux Shell'},
+];
+
+// STATE
+const defS=()=>({proj:'Mi red',locs:[],devs:[],hosts:[],links:[],vlans:[],subnets:[],fwrules:[],vmat:{},
+  sec:{bpdu:'yes',ps:'yes',ds:'yes',dai:'yes',ipsg:'no',dsv:''},
+  roas:{gwid:null,lanif:'',natvref:null,wancidr:'',wannh:''},
+  dhcp:{},
+  vw:{px:80,py:80,zoom:1}
+});
+let S=(()=>{try{const d=JSON.parse(localStorage.getItem(SK));return d||defS();}catch(e){return defS();}})();
+let sel={t:null,id:null};
+let tool='sel';
+let lnkdrag={on:false,ft:null,fid:null,mx:0,my:0};
+let pend_loc=null;
+let drag={on:false,t:null,id:null,ox:0,oy:0};
+let pan={on:false,sx:0,sy:0,vx:0,vy:0};
+
+function sv(){localStorage.setItem(SK,JSON.stringify(S));const e=G('sv');e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1300);}
+
+// IP UTILS
+const pip=s=>{const a=(s||'').split('.');if(a.length!==4)return null;let n=0;for(const x of a){if(!/^\d+$/.test(x))return null;const v=+x;if(v<0||v>255)return null;n=(n<<8)|v;}return n>>>0;};
+const i2s=n=>{n=n>>>0;return[(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.');};
+const pcidr=s=>{const m=(s||'').match(/^(\d{1,3}(?:\.\d{1,3}){3})\/(\d{1,2})$/);if(!m)return null;const ip=pip(m[1]);const pf=+m[2];if(ip===null||pf>32)return null;const mask=pf===0?0:(0xFFFFFFFF<<(32-pf))>>>0;const net=(ip&mask)>>>0;const bc=(net|(~mask>>>0))>>>0;return{ip,pf,mask,net,bc,fh:pf>=31?null:(net+1)>>>0,lh:pf>=31?null:(bc-1)>>>0};};
+const msk=m=>i2s(m>>>0);
+const fmtW=c=>{const ci=pcidr(c);if(!ci)return c.includes('/')?c:`host ${c}`;return`${i2s(ci.net)} ${i2s(~ci.mask>>>0)}`;};
+
+// LOOKUPS
+const byId=(arr,id)=>arr.find(x=>x.id===id)||null;
+const locById=id=>byId(S.locs,id);
+const devById=id=>byId(S.devs,id);
+const hstById=id=>byId(S.hosts,id);
+const vByRef=r=>S.vlans.find(v=>v.id===r)||null;
+const snByVR=r=>S.subnets.find(s=>s.vref===r)||null;
+const devsInLoc=lid=>S.devs.filter(d=>d.locid===lid);
+const hostsInLoc=lid=>S.hosts.filter(h=>h.locid===lid);
+const vcol=ref=>{const v=vByRef(ref);const i=S.vlans.findIndex(x=>x.id===ref);return v?.color||VCOLS[Math.max(0,i)%VCOLS.length];};
+
+// CANVAS SETUP
+const cv=G('cv'),ctx=cv.getContext('2d');
+let DPR=Math.max(1,devicePixelRatio||1);
+const LH=36,DSZ=44,HSZ=36,CW=52,CMAX=4;
+
+function resizeCv(){
+  const wr=G('cw');DPR=Math.max(1,devicePixelRatio||1);
+  cv.width=wr.clientWidth*DPR;cv.height=wr.clientHeight*DPR;
+  cv.style.width=wr.clientWidth+'px';cv.style.height=wr.clientHeight+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);draw();
+}
+window.addEventListener('resize',resizeCv);
+
+const w2s=(x,y)=>({x:x*S.vw.zoom+S.vw.px,y:y*S.vw.zoom+S.vw.py});
+const s2w=(x,y)=>({x:(x-S.vw.px)/S.vw.zoom,y:(y-S.vw.py)/S.vw.zoom});
+
+// LAYOUT
+function locBnd(loc){
+  const nd=devsInLoc(loc.id).length,nh=hostsInLoc(loc.id).length;
+  const dc=Math.min(CMAX,Math.max(1,nd)),dr=Math.ceil(nd/Math.max(1,dc));
+  const hc=Math.min(CMAX,Math.max(1,nh)),hr=Math.ceil(nh/Math.max(1,hc));
+  const ih=dr*DSZ+(nd>0&&nh>0?6:0)+hr*HSZ;
+  const lw=Math.max(210,Math.max(dc,hc)*CW+18);
+  const lh=LH+ih+14;
+  return{x:loc.x||100,y:loc.y||100,w:lw,h:lh};
+}
+
+function devXY(dv){
+  const loc=locById(dv.locid);if(!loc){return{x:dv.x||200,y:dv.y||200};}
+  const dl=devsInLoc(dv.locid);const idx=dl.findIndex(x=>x.id===dv.id);if(idx<0)return{x:loc.x,y:loc.y};
+  const bnd=locBnd(loc);const nc=Math.min(CMAX,Math.max(1,dl.length));
+  return{x:bnd.x+9+( idx%nc)*CW,y:bnd.y+LH+(Math.floor(idx/nc))*DSZ};
+}
+
+function hstXY(hs){
+  const loc=locById(hs.locid);if(!loc){return{x:hs.x||250,y:hs.y||250};}
+  const dl=devsInLoc(hs.locid),hl=hostsInLoc(hs.locid);
+  const idx=hl.findIndex(x=>x.id===hs.id);if(idx<0)return{x:loc.x,y:loc.y};
+  const bnd=locBnd(loc);const nc=Math.min(CMAX,Math.max(1,dl.length));
+  const dr=Math.ceil(dl.length/Math.max(1,nc));
+  const hgap=dl.length>0?6:0;const hnc=Math.min(CMAX,Math.max(1,hl.length));
+  return{x:bnd.x+9+(idx%hnc)*CW,y:bnd.y+LH+dr*DSZ+hgap+(Math.floor(idx/hnc))*HSZ};
+}
+
+function nodeCtr(tp,id){
+  if(tp==='loc'){const l=locById(id);if(!l)return null;const b=locBnd(l);return{x:b.x+b.w/2,y:b.y+b.h/2};}
+  if(tp==='dev'){const d=devById(id);if(!d)return null;const p=devXY(d);return{x:p.x+DSZ/2,y:p.y+DSZ/2};}
+  if(tp==='hst'){const h=hstById(id);if(!h)return null;const p=hstXY(h);return{x:p.x+HSZ/2,y:p.y+HSZ/2};}
+  return null;
+}
+
+// DRAW
+function rr(x,y,w,h,r){const rd=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+rd,y);ctx.arcTo(x+w,y,x+w,y+h,rd);ctx.arcTo(x+w,y+h,x,y+h,rd);ctx.arcTo(x,y+h,x,y,rd);ctx.arcTo(x,y,x+w,y,rd);ctx.closePath();}
+function ha(hex,a){try{const r=parseInt(hex.slice(1,3),16),g2=parseInt(hex.slice(3,5),16),b2=parseInt(hex.slice(5,7),16);return`rgba(${r},${g2},${b2},${a})`;}catch(e){return`rgba(20,40,70,${a})`;}}
+
+function draw(){
+  const W=cv.width/DPR,H=cv.height/DPR;ctx.clearRect(0,0,W,H);
+  // grid
+  const gs=22*S.vw.zoom,ox=S.vw.px%gs,oy=S.vw.py%gs;
+  ctx.save();ctx.strokeStyle='rgba(255,255,255,.025)';ctx.lineWidth=1;
+  for(let x=ox;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=oy;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.restore();
+  ctx.save();ctx.translate(S.vw.px,S.vw.py);ctx.scale(S.vw.zoom,S.vw.zoom);
+
+  // links
+  for(const lk of S.links){
+    const A=nodeCtr(lk.at,lk.aid),B=nodeCtr(lk.bt,lk.bid);if(!A||!B)continue;
+    const col=LCOLS[lk.lt]||'#00c8f0';const isSel=sel.t==='lnk'&&sel.id===lk.id;
+    ctx.save();ctx.strokeStyle=col;ctx.lineWidth=(isSel?3:1.5)/S.vw.zoom;ctx.globalAlpha=isSel?1:.55;
+    if(lk.lt==='fiber')ctx.setLineDash([8/S.vw.zoom,3/S.vw.zoom]);
+    else if(lk.lt==='wan')ctx.setLineDash([4/S.vw.zoom,4/S.vw.zoom]);
+    else if(lk.lt==='wifi')ctx.setLineDash([2/S.vw.zoom,5/S.vw.zoom]);
+    const cpx=(A.x+B.x)/2,cpy=Math.min(A.y,B.y)-45/S.vw.zoom;
+    ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.quadraticCurveTo(cpx,cpy,B.x,B.y);ctx.stroke();
+    ctx.setLineDash([]);ctx.globalAlpha=1;
+    if(isSel){ctx.shadowColor=col;ctx.shadowBlur=12/S.vw.zoom;ctx.stroke();ctx.shadowBlur=0;}
+    const ltxt=(lk.speed||'')+(lk.notes?' '+lk.notes.slice(0,14):'');
+    if(ltxt){
+      ctx.font=`${9/S.vw.zoom}px DM Sans`;ctx.globalAlpha=.7;const tw=ctx.measureText(ltxt).width;
+      const lx=(A.x+B.x)/2,ly=(A.y+B.y)/2-22/S.vw.zoom;
+      ctx.fillStyle='rgba(5,8,15,.9)';ctx.fillRect(lx-tw/2-3,ly-7/S.vw.zoom,tw+6,10/S.vw.zoom);
+      ctx.fillStyle=col;ctx.textAlign='center';ctx.fillText(ltxt,lx,ly);ctx.globalAlpha=1;
+    }
+    const ang=Math.atan2(B.y-A.y,B.x-A.x),al=9/S.vw.zoom;
+    ctx.globalAlpha=.65;ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(B.x,B.y);
+    ctx.lineTo(B.x-al*Math.cos(ang-.4),B.y-al*Math.sin(ang-.4));
+    ctx.lineTo(B.x-al*Math.cos(ang+.4),B.y-al*Math.sin(ang+.4));
+    ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.restore();
+  }
+
+  // locations
+  for(const loc of S.locs){
+    const bnd=locBnd(loc);const isSel=sel.t==='loc'&&sel.id===loc.id;
+    const bc=loc.color||'#0a2050';
+    ctx.save();
+    ctx.shadowColor='rgba(0,0,0,.45)';ctx.shadowBlur=14/S.vw.zoom;ctx.shadowOffsetY=3/S.vw.zoom;
+    rr(bnd.x,bnd.y,bnd.w,bnd.h,11);ctx.fillStyle=ha(bc,.38);ctx.fill();
+    ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+    ctx.strokeStyle=isSel?'#00c8f0':ha(bc,.7);ctx.lineWidth=(isSel?2.5:1.2)/S.vw.zoom;ctx.stroke();
+    if(isSel){ctx.shadowColor='rgba(0,200,240,.45)';ctx.shadowBlur=16/S.vw.zoom;ctx.stroke();ctx.shadowBlur=0;}
+    rr(bnd.x,bnd.y,bnd.w,LH,11);ctx.fillStyle=ha(bc,.62);ctx.fill();
+    ctx.font=`bold ${11.5/S.vw.zoom}px DM Sans`;ctx.fillStyle='#d8e8f8';ctx.textAlign='left';ctx.textBaseline='middle';
+    ctx.fillText(`${TICO[loc.type]||'📍'} ${(loc.name||'').slice(0,24)}`,bnd.x+9,bnd.y+LH/2);
+    const dc=devsInLoc(loc.id).length,hc=hostsInLoc(loc.id).length;
+    ctx.font=`${8.5/S.vw.zoom}px DM Sans`;ctx.fillStyle='rgba(110,144,184,.65)';ctx.textAlign='right';
+    ctx.fillText(`${dc}⇄ ${hc}💻`,bnd.x+bnd.w-7,bnd.y+LH/2);
+    ctx.restore();
+    for(const dv of devsInLoc(loc.id)){
+      const p=devXY(dv);const isD=sel.t==='dev'&&sel.id===dv.id;
+      ctx.save();ctx.fillStyle=isD?'rgba(0,200,240,.2)':'rgba(10,15,26,.82)';
+      ctx.strokeStyle=isD?'#00c8f0':'rgba(35,48,66,.9)';ctx.lineWidth=(isD?2:1)/S.vw.zoom;
+      rr(p.x,p.y,DSZ,DSZ,8);ctx.fill();ctx.stroke();
+      if(isD){ctx.shadowColor='rgba(0,200,240,.4)';ctx.shadowBlur=10/S.vw.zoom;ctx.stroke();ctx.shadowBlur=0;}
+      ctx.font=`${19/S.vw.zoom}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(DICO[dv.type]||'⬡',p.x+DSZ/2,p.y+DSZ/2-1);
+      ctx.font=`${7/S.vw.zoom}px DM Sans`;ctx.fillStyle=isD?'#00c8f0':'rgba(110,144,184,.8)';
+      ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.fillText((dv.name||'').slice(0,9),p.x+DSZ/2,p.y+DSZ-0.5/S.vw.zoom);
+      ctx.restore();
+    }
+    for(const hs of hostsInLoc(loc.id)){
+      const p=hstXY(hs);const isH=sel.t==='hst'&&sel.id===hs.id;const hasIP=hs.sip||(hs.ipm==='dhcp');
+      ctx.save();ctx.fillStyle=isH?'rgba(0,217,138,.18)':'rgba(10,15,26,.68)';
+      ctx.strokeStyle=isH?'#00d98a':hasIP?'rgba(0,217,138,.28)':'rgba(35,48,66,.6)';ctx.lineWidth=(isH?2:1)/S.vw.zoom;
+      rr(p.x,p.y,HSZ,HSZ,7);ctx.fill();ctx.stroke();
+      ctx.font=`${15/S.vw.zoom}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(HICO[hs.os]||'💻',p.x+HSZ/2,p.y+HSZ/2-1);
+      ctx.font=`${6.5/S.vw.zoom}px JetBrains Mono`;ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.fillStyle=hs.sip?'rgba(0,217,138,.75)':'rgba(110,144,184,.6)';
+      ctx.fillText(hs.sip||'DHCP',p.x+HSZ/2,p.y+HSZ-0.5/S.vw.zoom);
+      ctx.restore();
+    }
+  }
+  // free devs
+  for(const dv of S.devs.filter(d=>!d.locid||!locById(d.locid))){
+    if(dv.x===undefined)continue;
+    const isD=sel.t==='dev'&&sel.id===dv.id;const SZ=52;
+    ctx.save();ctx.fillStyle=isD?'rgba(0,200,240,.2)':'rgba(10,15,26,.88)';
+    ctx.strokeStyle=isD?'#00c8f0':'#2d3f58';ctx.lineWidth=(isD?2.5:1.5)/S.vw.zoom;
+    rr(dv.x,dv.y,SZ,SZ,9);ctx.fill();ctx.stroke();
+    if(isD){ctx.shadowColor='rgba(0,200,240,.4)';ctx.shadowBlur=12/S.vw.zoom;ctx.stroke();ctx.shadowBlur=0;}
+    ctx.font=`${22/S.vw.zoom}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(DICO[dv.type]||'⬡',dv.x+SZ/2,dv.y+SZ/2-1);
+    ctx.font=`${8/S.vw.zoom}px DM Sans`;ctx.fillStyle=isD?'#00c8f0':'rgba(110,144,184,.85)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText((dv.name||'').slice(0,10),dv.x+SZ/2,dv.y+SZ+1/S.vw.zoom);
+    ctx.restore();
+  }
+  // link preview
+  if(lnkdrag.on){
+    const A=nodeCtr(lnkdrag.ft,lnkdrag.fid);
+    if(A){ctx.save();ctx.strokeStyle='rgba(0,200,240,.45)';ctx.lineWidth=2/S.vw.zoom;ctx.setLineDash([6/S.vw.zoom,4/S.vw.zoom]);ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(lnkdrag.mx,lnkdrag.my);ctx.stroke();ctx.restore();}
+  }
+  ctx.restore();
+}
+
+// HIT TEST
+function hitTest(wx,wy){
+  for(const dv of S.devs){const p=devXY(dv);const sz=dv.locid?DSZ:52;if(wx>=p.x&&wx<=p.x+sz&&wy>=p.y&&wy<=p.y+sz)return{t:'dev',id:dv.id};}
+  for(const hs of S.hosts){const p=hstXY(hs);if(wx>=p.x&&wx<=p.x+HSZ&&wy>=p.y&&wy<=p.y+HSZ)return{t:'hst',id:hs.id};}
+  for(const loc of [...S.locs].reverse()){const b=locBnd(loc);if(wx>=b.x&&wx<=b.x+b.w&&wy>=b.y&&wy<=b.y+b.h)return{t:'loc',id:loc.id};}
+  for(const lk of S.links){
+    const A=nodeCtr(lk.at,lk.aid),B=nodeCtr(lk.bt,lk.bid);if(!A||!B)continue;
+    const dx=B.x-A.x,dy=B.y-A.y,len=Math.sqrt(dx*dx+dy*dy);if(!len)continue;
+    const t2=((wx-A.x)*dx+(wy-A.y)*dy)/(len*len);if(t2<0||t2>1)continue;
+    const dist=Math.sqrt((wx-(A.x+t2*dx))**2+(wy-(A.y+t2*dy))**2);
+    if(dist<12/S.vw.zoom)return{t:'lnk',id:lk.id};
+  }
+  return null;
+}
+
+function cvPos(e){const r=cv.getBoundingClientRect();return s2w(e.clientX-r.left,e.clientY-r.top);}
+
+cv.addEventListener('mousedown',e=>{
+  const{x,y}=cvPos(e);
+  if(tool==='pan'){pan={on:true,sx:e.clientX,sy:e.clientY,vx:S.vw.px,vy:S.vw.py};return;}
+  if(tool==='lnk'){
+    const hit=hitTest(x,y);
+    if(hit&&!lnkdrag.on){lnkdrag={on:true,ft:hit.t,fid:hit.id,mx:x,my:y};showHint('Clic en destino del enlace · Esc=cancelar');draw();return;}
+    if(lnkdrag.on){
+      const h2=hitTest(x,y);
+      if(h2&&h2.id!==lnkdrag.fid){fillLnkMdl(lnkdrag.ft,lnkdrag.fid,h2.t,h2.id);om('mLnk');}
+      lnkdrag={on:false,ft:null,fid:null,mx:0,my:0};hideHint();draw();return;
+    }
+    return;
+  }
+  if(pend_loc){
+    const loc=pend_loc;loc.x=x-locBnd(loc).w/2;loc.y=y-LH/2;
+    S.locs.push(loc);pend_loc=null;hideHint();sel={t:'loc',id:loc.id};sv();showPanel('loc',loc.id);draw();return;
+  }
+  const hit=hitTest(x,y);
+  if(hit){
+    sel=hit;drag.on=true;drag.t=hit.t;drag.id=hit.id;
+    const c=nodeCtr(hit.t,hit.id);drag.ox=x-(c?.x||x);drag.oy=y-(c?.y||y);
+    showPanel(hit.t,hit.id);draw();
+  } else {
+    sel={t:null,id:null};drag.on=false;showDash();draw();
+  }
+});
+
+cv.addEventListener('mousemove',e=>{
+  const{x,y}=cvPos(e);
+  if(pan.on){S.vw.px=pan.vx+(e.clientX-pan.sx);S.vw.py=pan.vy+(e.clientY-pan.sy);draw();return;}
+  if(drag.on){
+    const nx=x-drag.ox,ny=y-drag.oy;
+    if(drag.t==='loc'){const l=locById(drag.id);if(l){l.x=nx-locBnd(l).w/2;l.y=ny-locBnd(l).h/2;}}
+    else if(drag.t==='dev'){const d=devById(drag.id);if(d&&!d.locid){d.x=nx-26;d.y=ny-26;}}
+    else if(drag.t==='hst'){const h=hstById(drag.id);if(h&&!h.locid){h.x=nx-HSZ/2;h.y=ny-HSZ/2;}}
+    draw();return;
+  }
+  if(lnkdrag.on){lnkdrag.mx=x;lnkdrag.my=y;draw();}
+  const hit=hitTest(x,y);cv.style.cursor=tool==='pan'?'grab':tool==='lnk'?'crosshair':hit?'pointer':'default';
+});
+
+cv.addEventListener('mouseup',()=>{if(pan.on){pan.on=false;}if(drag.on){drag.on=false;sv();}});
+cv.addEventListener('dblclick',e=>{const{x,y}=cvPos(e);const hit=hitTest(x,y);if(hit)showPanel(hit.t,hit.id);});
+cv.addEventListener('wheel',e=>{
+  e.preventDefault();const f=e.deltaY>0?.88:1.13;const r=cv.getBoundingClientRect();
+  const cx=e.clientX-r.left,cy=e.clientY-r.top;
+  S.vw.px=cx-(cx-S.vw.px)*f;S.vw.py=cy-(cy-S.vw.py)*f;
+  S.vw.zoom=Math.max(.08,Math.min(6,S.vw.zoom*f));draw();
+},{passive:false});
+
+// touch
+cv.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;const t=e.touches[0];const r=cv.getBoundingClientRect();const{x,y}=s2w(t.clientX-r.left,t.clientY-r.top);const hit=hitTest(x,y);if(hit){sel=hit;drag={on:true,t:hit.t,id:hit.id,ox:x-(nodeCtr(hit.t,hit.id)?.x||x),oy:y-(nodeCtr(hit.t,hit.id)?.y||y)};showPanel(hit.t,hit.id);draw();}},{passive:true});
+cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length!==1||!drag.on)return;const t=e.touches[0];const r=cv.getBoundingClientRect();const{x,y}=s2w(t.clientX-r.left,t.clientY-r.top);if(drag.t==='loc'){const l=locById(drag.id);if(l){l.x=(x-drag.ox)-locBnd(l).w/2;l.y=(y-drag.oy)-locBnd(l).h/2;}}draw();},{passive:false});
+cv.addEventListener('touchend',()=>{drag.on=false;sv();});
+
+window.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
+  if(e.key==='v'||e.key==='V')setTool('sel');
+  if(e.key==='p'||e.key==='P'||e.key===' '){e.preventDefault();setTool(tool==='pan'?'sel':'pan');}
+  if(e.key==='l'||e.key==='L')setTool('lnk');
+  if(e.key==='Escape'){lnkdrag={on:false,ft:null,fid:null,mx:0,my:0};pend_loc=null;hideHint();setTool('sel');draw();}
+  if(e.key==='Delete'||e.key==='Backspace')delSel();
+});
+
+function setTool(t){
+  tool=t;
+  ['tSel','tPan','tLnk'].forEach(id=>G(id)?.classList.remove('on'));
+  if(t==='sel')G('tSel').classList.add('on');
+  else if(t==='pan'){G('tPan').classList.add('on');}
+  else if(t==='lnk'){G('tLnk').classList.add('on');showHint('Clic en origen → clic en destino | Esc=cancelar');}
+  cv.style.cursor=t==='pan'?'grab':t==='lnk'?'crosshair':'default';
+  if(t!=='lnk'){lnkdrag={on:false,ft:null,fid:null,mx:0,my:0};if(t!=='sel')hideHint();}
+}
+G('tSel').onclick=()=>setTool('sel');G('tPan').onclick=()=>setTool('pan');G('tLnk').onclick=()=>setTool('lnk');
+G('tZI').onclick=()=>{S.vw.zoom=Math.min(6,S.vw.zoom*1.2);draw();};
+G('tZO').onclick=()=>{S.vw.zoom=Math.max(.08,S.vw.zoom/1.2);draw();};
+G('tDel').onclick=()=>delSel();
+G('tFit').onclick=()=>{
+  if(!S.locs.length&&!S.devs.filter(d=>d.x).length){S.vw={px:80,py:80,zoom:1};draw();return;}
+  let mnx=1e9,mny=1e9,mxx=-1e9,mxy=-1e9;
+  for(const l of S.locs){const b=locBnd(l);mnx=Math.min(mnx,b.x);mny=Math.min(mny,b.y);mxx=Math.max(mxx,b.x+b.w);mxy=Math.max(mxy,b.y+b.h);}
+  for(const d of S.devs.filter(d=>d.x)){mnx=Math.min(mnx,d.x);mny=Math.min(mny,d.y);mxx=Math.max(mxx,d.x+58);mxy=Math.max(mxy,d.y+58);}
+  if(!isFinite(mnx))return;
+  const W=cv.width/DPR,H=cv.height/DPR,pad=50;
+  S.vw.zoom=Math.max(.1,Math.min(3,Math.min((W-pad*2)/Math.max(1,mxx-mnx),(H-pad*2)/Math.max(1,mxy-mny))));
+  S.vw.px=pad-mnx*S.vw.zoom+(W-pad*2-(mxx-mnx)*S.vw.zoom)/2;
+  S.vw.py=pad-mny*S.vw.zoom+(H-pad*2-(mxy-mny)*S.vw.zoom)/2;
+  draw();
+};
+
+function delSel(){
+  if(!sel.t)return;
+  if(sel.t==='loc'){if(!confirm('¿Borrar ubicación y todo su contenido?'))return;S.devs=S.devs.filter(d=>d.locid!==sel.id);S.hosts=S.hosts.filter(h=>h.locid!==sel.id);S.links=S.links.filter(l=>l.aid!==sel.id&&l.bid!==sel.id);S.locs=S.locs.filter(l=>l.id!==sel.id);}
+  else if(sel.t==='dev'){S.links=S.links.filter(l=>l.aid!==sel.id&&l.bid!==sel.id);S.devs=S.devs.filter(d=>d.id!==sel.id);}
+  else if(sel.t==='hst'){S.hosts=S.hosts.filter(h=>h.id!==sel.id);}
+  else if(sel.t==='lnk'){S.links=S.links.filter(l=>l.id!==sel.id);}
+  sel={t:null,id:null};sv();showDash();draw();
+}
+
+function showHint(t){G('cvh').textContent=t;G('cvh').style.display='';}
+function hideHint(){G('cvh').style.display='none';}
+
+// MODALS
+function om(id){G(id).classList.add('on');}
+function cm(id){G(id).classList.remove('on');}
+document.querySelectorAll('.mbk').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)cm(m.id);}));
+function bindTabs(ctx2){ctx2.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{const bar=t.parentElement;bar.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));t.classList.add('on');const tid=t.dataset.tab;ctx2.querySelectorAll('.tc').forEach(c=>c.classList.toggle('on',c.id===tid));});}
+
+// PANEL
+function setPanel(title,badge,badgecls,showClose,bodyHTML,ftHTML){
+  G('ptitle').textContent=title;
+  const pb=G('pbadge');if(badge){pb.style.display='inline-flex';pb.textContent=badge;pb.className='b '+(badgecls||'bac');}else pb.style.display='none';
+  const pc=G('pclose');if(showClose){pc.style.display='inline-flex';pc.onclick=()=>{sel={t:null,id:null};showDash();draw();};}else pc.style.display='none';
+  G('pb').innerHTML=bodyHTML;
+  const pf=G('pf');if(ftHTML){pf.style.display='flex';pf.innerHTML=ftHTML;}else pf.style.display='none';
+  bindTabs(G('pb'));
+}
+
+function showPanel(tp,id){
+  sel={t:tp,id};draw();
+  if(tp==='loc')showLocP(id);
+  else if(tp==='dev')showDevP(id);
+  else if(tp==='hst')showHstP(id);
+  else if(tp==='lnk')showLnkP(id);
+}
+
+// ── DASHBOARD ──
+function showDash(){
+  const nl=S.locs.length,nd=S.devs.length,nh=S.hosts.length;
+  let body=`<div class="mstats">
+    <div class="ms" style="border-top-color:var(--ac)"><div class="msv" style="color:var(--ac)">${nl}</div><div class="msl">Ubicaciones</div></div>
+    <div class="ms" style="border-top-color:var(--gn)"><div class="msv" style="color:var(--gn)">${nd}</div><div class="msl">Dispositivos</div></div>
+    <div class="ms" style="border-top-color:var(--yw)"><div class="msv" style="color:var(--yw)">${nh}</div><div class="msl">Hosts</div></div>
+  </div>
+  <div class="co co-a"><b>Instrucciones rápidas:</b><br>
+  📍 Clic en "<b>Ubicación</b>" → clic en el canvas para colocarla<br>
+  ⟺ Herramienta <b>Link</b> → clic origen → clic destino<br>
+  🖱 <b>Clic</b> en cualquier elemento para configurar<br>
+  ✕ Tecla <b>Delete</b> para borrar selección</div>
+  <hr class="sep"/>
+  <div class="tabs"><div class="tab on" data-tab="dv">VLANs (${S.vlans.length})</div><div class="tab" data-tab="dl">Enlaces (${S.links.length})</div><div class="tab" data-tab="df">FW (${S.fwrules.length})</div></div>
+  <div class="tc on" id="dv">${renderVlanList()}</div>
+  <div class="tc" id="dl">${renderLinkList()}</div>
+  <div class="tc" id="df">${renderFwList()}</div>`;
+  setPanel('NetWizard Pro',null,null,false,body,null);
+}
+
+function renderVlanList(){
+  if(!S.vlans.length)return`<div class="empty">Sin VLANs. Usa el botón 🏷 VLAN.</div>`;
+  return S.vlans.sort((a,b)=>a.vid-b.vid).map(v=>{const sn=snByVR(v.id);return`<div class="lrow"><span style="width:8px;height:8px;border-radius:50%;background:${v.color||'#00c8f0'};flex-shrink:0;display:inline-block;"></span><div class="linf"><div class="lnm">VLAN ${v.vid} — ${esc(v.name)}</div><div class="lsb">${sn?sn.cidr:'Sin subnet'} · ${S.hosts.filter(h=>h.vref===v.id).length} hosts</div></div><button class="btn bd bxs" onclick="delVlan('${v.id}')">✕</button></div>`;}).join('');
+}
+
+function renderLinkList(){
+  if(!S.links.length)return`<div class="empty">Sin enlaces. Herramienta ⟺ Link.</div>`;
+  return S.links.map(lk=>{
+    const fn=lk.at==='loc'?locById(lk.aid)?.name:devById(lk.aid)?.name||'?';
+    const tn=lk.bt==='loc'?locById(lk.bid)?.name:devById(lk.bid)?.name||'?';
+    const col=LCOLS[lk.lt]||'#00c8f0';
+    return`<div class="lrow" onclick="sel={t:'lnk',id:'${lk.id}'};draw();showPanel('lnk','${lk.id}')"><div style="width:10px;height:3px;background:${col};border-radius:2px;flex-shrink:0;"></div><div class="linf"><div class="lnm">${esc(fn)} → ${esc(tn)}</div><div class="lsb">${lk.lt||'eth'} · ${lk.speed||''} ${lk.notes||''}</div></div><button class="btn bd bxs" onclick="event.stopPropagation();delLnk('${lk.id}')">✕</button></div>`;
+  }).join('');
+}
+
+function renderFwList(){
+  if(!S.fwrules.length)return`<div class="empty">Sin reglas FW.</div>`;
+  return S.fwrules.sort((a,b)=>(a.prio||100)-(b.prio||100)).map(r=>`<div class="fwr ${r.ena===false?'fwd':''}"><span class="b ${r.act==='allow'?'bgn':r.act==='log'?'byw':'brd'}" style="font-size:9px;">${(r.act||'').toUpperCase()}</span><span style="flex:1;font-size:10.5px;">${esc(r.name)}</span><span style="font-size:9px;color:var(--t3);">${esc(r.src)}→${esc(r.dst)}</span><button class="btn bs bxs" onclick="toggleFw('${r.id}')">${r.ena===false?'🟢':'🔴'}</button><button class="btn bd bxs" onclick="delFw('${r.id}')">✕</button></div>`).join('');
+}
+
+// ── LOCATION PANEL ──
+function showLocP(id){
+  const loc=locById(id);if(!loc)return;
+  const devs=devsInLoc(id),hosts=hostsInLoc(id);
+  const body=`<div class="co co-a">${devs.length} dispositivos · ${hosts.length} hosts${loc.notes?'<br>'+esc(loc.notes):''}</div>
+  <div class="tabs"><div class="tab on" data-tab="ld">Dispositivos</div><div class="tab" data-tab="lh">Hosts</div><div class="tab" data-tab="le">Editar</div></div>
+  <div class="tc on" id="ld">
+    ${devs.length?devs.map(d=>`<div class="lrow" onclick="showPanel('dev','${d.id}')"><span class="lico">${DICO[d.type]||'⬡'}</span><div class="linf"><div class="lnm">${esc(d.name)}</div><div class="lsb">${d.type} · ${esc(d.vendor||'—')}</div></div><button class="btn bd bxs" onclick="event.stopPropagation();delDev('${d.id}')">✕</button></div>`).join(''):`<div class="empty">Sin dispositivos</div>`}
+    <button class="btn bs bfull" style="margin-top:7px;" onclick="openAddDevLoc('${id}')">+ Añadir dispositivo</button>
+  </div>
+  <div class="tc" id="lh">
+    ${hosts.length?hosts.map(h=>`<div class="lrow" onclick="showPanel('hst','${h.id}')"><span class="lico">${HICO[h.os]||'💻'}</span><div class="linf"><div class="lnm">${esc(h.name)}</div><div class="lsb">${HLBL[h.os]||h.os} · ${h.sip||h.ipm}</div></div><button class="btn bd bxs" onclick="event.stopPropagation();delHst('${h.id}')">✕</button></div>`).join(''):`<div class="empty">Sin hosts</div>`}
+    <button class="btn bs bfull" style="margin-top:7px;" onclick="openAddHstLoc('${id}')">+ Añadir host</button>
+  </div>
+  <div class="tc" id="le">
+    <label class="fl">Nombre</label><input id="le_n" value="${esc(loc.name||'')}"/>
+    <div class="row"><div><label class="fl">Tipo</label><select id="le_t">${Object.entries(TICO).map(([k,v2])=>`<option value="${k}" ${loc.type===k?'selected':''}>${v2} ${k}</option>`).join('')}</select></div>
+    <div><label class="fl">Color</label><input type="color" id="le_c" value="${loc.color||'#0a2050'}" style="height:32px"/></div></div>
+    <label class="fl">Notas</label><input id="le_o" value="${esc(loc.notes||'')}"/>
+  </div>`;
+  setPanel((TICO[loc.type]||'📍')+' '+loc.name,loc.type,null,true,body,
+    `<button class="btn bd" onclick="sel={t:'loc',id:'${id}'};delSel()">🗑</button><button class="btn bp" onclick="saveLocEdit('${id}')">💾 Guardar</button>`);
+}
+
+function saveLocEdit(id){const l=locById(id);if(!l)return;l.name=G('le_n')?.value||l.name;l.type=G('le_t')?.value||l.type;l.color=G('le_c')?.value||l.color;l.notes=G('le_o')?.value||'';sv();showLocP(id);draw();}
+function openAddDevLoc(lid){fillLocSels();G('d_l').value=lid;G('d_id').value='';G('md_t').textContent='🖥 Nuevo dispositivo';om('mDev');}
+function openAddHstLoc(lid){fillLocSels();fillVlanSels();fillSwSels();G('h_l').value=lid;G('h_id').value='';G('mh_t').textContent='💻 Nuevo host';om('mHost');}
+
+// ── DEVICE PANEL ──
+let devFmt=null;
+function showDevP(id){
+  const dv=devById(id);if(!dv)return;
+  devFmt=dv.vendor||'cisco_ios';
+  const cfg=genDevCfg(dv,devFmt);
+  const isFW=dv.type==='firewall';const isRT=dv.type==='router';const isSW=dv.type==='switch';
+  const body=`<div class="tabs"><div class="tab on" data-tab="dc">Config</div><div class="tab" data-tab="ds">Seguridad</div><div class="tab" data-tab="dn">Red/VLANs</div><div class="tab" data-tab="de">Editar</div></div>
+  <div class="tc on" id="dc">
+    <div class="vps" id="dv_vps">${ALL_VFMTS.map(vf=>`<span class="vp ${devFmt===vf.id?'on':''}" onclick="setDvFmt('${id}','${vf.id}')">${vf.l}</span>`).join('')}</div>
+    <div class="codehd"><span id="dv_fn">${esc(dv.name)}.cfg</span><div style="display:flex;gap:4px;"><button class="btn bs bxs" onclick="navigator.clipboard?.writeText(G('dv_code').textContent).then(()=>alert('✓ Copiado'))">📋</button><button class="btn bs bxs" onclick="dlDevCfg('${id}')">⬇</button></div></div>
+    <div class="codeblk" id="dv_code" style="min-height:180px;">${esc(cfg)}</div>
+  </div>
+  <div class="tc" id="ds">${renderSecPanel(dv)}</div>
+  <div class="tc" id="dn">${renderDevNetP(dv)}</div>
+  <div class="tc" id="de">
+    <label class="fl">Nombre</label><input id="de_n" value="${esc(dv.name||'')}"/>
+    <div class="row"><div><label class="fl">Tipo</label><select id="de_ty">${Object.keys(DICO).map(k=>`<option value="${k}" ${dv.type===k?'selected':''}>${DICO[k]} ${k}</option>`).join('')}</select></div>
+    <div><label class="fl">Vendor/OS</label><select id="de_v">${['','cisco_ios','cisco_asa','juniper','aruba','pfsense','fortinet'].map(v2=>`<option value="${v2}" ${dv.vendor===v2?'selected':''}>${v2||'— sel —'}</option>`).join('')}</select></div></div>
+    <label class="fl">IP gestión</label><input id="de_m" value="${esc(dv.mgmt||'')}"/>
+    <div class="row"><div><label class="fl">Edge (NAT)</label><select id="de_ie"><option value="no" ${dv.iedge!=='yes'?'selected':''}>No</option><option value="yes" ${dv.iedge==='yes'?'selected':''}>Sí</option></select></div>
+    <div><label class="fl">Interfaz WAN</label><input id="de_wi" value="${esc(dv.wanif||'')}"/></div></div>
+    <label class="fl">Notas</label><input id="de_o" value="${esc(dv.notes||'')}"/>
+  </div>`;
+  setPanel((DICO[dv.type]||'⬡')+' '+dv.name,dv.type,dv.type==='firewall'?'brd':dv.type==='router'?'bgn':'bac',true,body,
+    `<button class="btn bd" onclick="sel={t:'dev',id:'${id}'};delSel()">🗑</button><button class="btn bp" onclick="saveDvEdit('${id}')">💾 Guardar</button>`);
+}
+
+function setDvFmt(did,fmt){
+  devFmt=fmt;
+  document.querySelectorAll('#dv_vps .vp').forEach(p=>p.classList.toggle('on',p.textContent===(ALL_VFMTS.find(v=>v.id===fmt)?.l||'')));
+  const dv=devById(did);if(!dv)return;
+  const el=G('dv_code');if(el)el.textContent=genDevCfg(dv,fmt);
+  const fn=G('dv_fn');if(fn)fn.textContent=`${esc(dv.name)}.${fmt==='win_ps'?'ps1':fmt==='linux_sh'?'sh':'cfg'}`;
+}
+function dlDevCfg(id){const dv=devById(id);if(!dv)return;const txt=genDevCfg(dv,devFmt);const ext=devFmt==='win_ps'?'ps1':devFmt==='linux_sh'?'sh':'cfg';dlFile(`${dv.name}.${ext}`,txt);}
+function saveDvEdit(id){const dv=devById(id);if(!dv)return;dv.name=G('de_n')?.value||dv.name;dv.type=G('de_ty')?.value||dv.type;dv.vendor=G('de_v')?.value||'';dv.mgmt=G('de_m')?.value||'';dv.iedge=G('de_ie')?.value||'no';dv.wanif=G('de_wi')?.value||'';dv.notes=G('de_o')?.value||'';sv();showDevP(id);draw();}
+
+function renderSecPanel(dv){
+  const sec=S.sec;const isSW=dv.type==='switch';const isRT=dv.type==='router';const isFW=dv.type==='firewall';
+  let html=`<div class="co co-a">Opciones de seguridad para <b>${esc(dv.name)}</b></div>`;
+  html+=`<div class="row">
+    <div><label class="fl">BPDU Guard</label><select onchange="S.sec.bpdu=this.value;sv()"><option value="yes" ${sec.bpdu==='yes'?'selected':''}>✅ Activo</option><option value="no" ${sec.bpdu!=='yes'?'selected':''}>❌ No</option></select></div>
+    <div><label class="fl">Port-Security</label><select onchange="S.sec.ps=this.value;sv()"><option value="yes" ${sec.ps==='yes'?'selected':''}>✅ Activo</option><option value="no" ${sec.ps!=='yes'?'selected':''}>❌ No</option></select></div>
+  </div><div class="row">
+    <div><label class="fl">DHCP Snooping</label><select onchange="S.sec.ds=this.value;sv()"><option value="yes" ${sec.ds==='yes'?'selected':''}>✅ Activo</option><option value="no" ${sec.ds!=='yes'?'selected':''}>❌ No</option></select></div>
+    <div><label class="fl">DAI</label><select onchange="S.sec.dai=this.value;sv()"><option value="yes" ${sec.dai==='yes'?'selected':''}>✅ Activo</option><option value="no" ${sec.dai!=='yes'?'selected':''}>❌ No</option></select></div>
+  </div>
+  <label class="fl">IP Source Guard</label><select onchange="S.sec.ipsg=this.value;sv()"><option value="no" ${sec.ipsg!=='yes'?'selected':''}>❌ No</option><option value="yes" ${sec.ipsg==='yes'?'selected':''}>✅ Activo</option></select>
+  <hr class="sep"/>
+  <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Perfiles rápidos:</div>
+  <div style="display:flex;gap:5px;">
+    <button class="btn bs bsm" onclick="applySecP('low');showDevP('${dv.id}')">🟢 Básico</button>
+    <button class="btn bs bsm" onclick="applySecP('med');showDevP('${dv.id}')">🟡 Medio</button>
+    <button class="btn bs bsm" onclick="applySecP('high');showDevP('${dv.id}')">🔴 Alto</button>
+  </div>`;
+  if(isFW||isRT){
+    html+=`<hr class="sep"/><div style="font-size:11px;font-weight:700;margin-bottom:5px;">Reglas Firewall:</div>
+    <div id="fw_inline">${renderFwInline()}</div>
+    <button class="btn bs bsm bfull" style="margin-top:5px;" onclick="G('fw_addform').style.display=G('fw_addform').style.display==='none'?'block':'none'">+ Añadir regla</button>
+    <div id="fw_addform" style="display:none;margin-top:7px;">
+      <div class="row"><div><label class="fl">Nombre</label><input id="fw_n" placeholder="Permitir HTTP"/></div><div><label class="fl">Acción</label><select id="fw_a"><option value="allow">✅ Permitir</option><option value="deny">🚫 Denegar</option><option value="log">📝 Log</option></select></div></div>
+      <div class="row"><div><label class="fl">Origen</label><input id="fw_src" placeholder="any"/></div><div><label class="fl">Destino</label><input id="fw_dst" placeholder="any"/></div></div>
+      <div class="row"><div><label class="fl">Proto</label><select id="fw_pr"><option value="any">any</option><option value="tcp">TCP</option><option value="udp">UDP</option><option value="icmp">ICMP</option></select></div><div><label class="fl">Puerto</label><input id="fw_pt" placeholder="80,443"/></div><div><label class="fl">Prio</label><input type="number" id="fw_po" value="100" style="width:55px;"/></div></div>
+      <div style="display:flex;gap:5px;margin-top:6px;"><button class="btn bs bsm" onclick="G('fw_addform').style.display='none'">Cancelar</button><button class="btn bp bsm" onclick="saveFwRule('${dv.id}')">Añadir</button></div>
+    </div>`;
+  }
+  return html;
+}
+
+function renderFwInline(){
+  if(!S.fwrules.length)return`<div class="note">Sin reglas.</div>`;
+  return S.fwrules.sort((a,b)=>(a.prio||100)-(b.prio||100)).map(r=>`<div class="fwr ${r.ena===false?'fwd':''}"><span class="b ${r.act==='allow'?'bgn':r.act==='log'?'byw':'brd'}" style="font-size:9px;">${(r.act||'').toUpperCase()}</span><span style="flex:1;font-size:10px;">${esc(r.name)}</span><span style="font-size:9px;color:var(--t3);">${esc(r.src)}→${esc(r.dst)}</span><button class="btn bd bxs" onclick="delFw('${r.id}');if(sel.t==='dev')showDevP(sel.id)">✕</button></div>`).join('');
+}
+
+function saveFwRule(did){const n=G('fw_n')?.value;if(!n)return alert('Nombre requerido.');
+  S.fwrules.push({id:uid('fw'),name:n,act:G('fw_a').value,src:G('fw_src').value||'any',dst:G('fw_dst').value||'any',proto:G('fw_pr').value,port:G('fw_pt').value||'any',prio:parseInt(G('fw_po').value)||100,ena:true});
+  sv();showDevP(did);}
+function toggleFw(id){const r=S.fwrules.find(x=>x.id===id);if(r){r.ena=!r.ena;sv();showDash();}}
+function delFw(id){S.fwrules=S.fwrules.filter(x=>x.id!==id);sv();}
+function applySecP(p){
+  if(p==='low')Object.assign(S.sec,{bpdu:'no',ps:'no',ds:'no',dai:'no',ipsg:'no'});
+  else if(p==='med')Object.assign(S.sec,{bpdu:'yes',ps:'yes',ds:'yes',dai:'no',ipsg:'no'});
+  else Object.assign(S.sec,{bpdu:'yes',ps:'yes',ds:'yes',dai:'yes',ipsg:'yes'});
+  sv();
+}
+
+function renderDevNetP(dv){
+  let html='';
+  if(!S.vlans.length){html=`<div class="note">Sin VLANs. Usa el botón 🏷 VLAN.</div>`;return html;}
+  html=S.vlans.sort((a,b)=>a.vid-b.vid).map(v=>{const sn=snByVR(v.id);const hc=S.hosts.filter(h=>h.vref===v.id).length;const ci=sn?pcidr(sn.cidr):null;const used=S.hosts.filter(h=>h.vref===v.id&&h.sip).length;const tot=ci?(ci.lh-ci.fh):0;
+    return`<div style="margin-bottom:9px;"><div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;"><span style="width:7px;height:7px;border-radius:50%;background:${v.color};"></span><b style="font-size:11px;">VLAN ${v.vid}</b> ${esc(v.name)} <span class="b bgr">${hc}h</span>${sn?`<span class="b bgn" style="font-size:9px;">${sn.cidr}</span>`:''}</div>${sn&&ci?`<div class="ipbar"><div class="ibs" style="background:var(--yw);color:#000;width:${Math.min(50,1/Math.max(1,tot)*100)}%">GW</div><div class="ibs" style="background:var(--gn);color:#000;width:${Math.min(95,used/Math.max(1,tot)*100)}%">${used||''}</div></div>`:''}</div>`;
+  }).join('');
+  if(dv.type==='router'||dv.type==='firewall'){
+    html+=`<hr class="sep"/><div style="font-size:11px;font-weight:700;margin-bottom:6px;">RoaS / Gateway:</div>
+    <div class="row"><div><label class="fl">Interfaz LAN</label><input id="roas_if" value="${esc(S.roas.lanif||'')}" placeholder="GigabitEthernet0/1" onblur="S.roas.lanif=this.value;S.roas.gwid='${dv.id}';sv()"/></div>
+    <div><label class="fl">WAN IP/CIDR</label><input id="roas_wc" value="${esc(S.roas.wancidr||'')}" placeholder="203.0.113.2/30" onblur="S.roas.wancidr=this.value;sv()"/></div></div>
+    <label class="fl">Next-hop ISP</label><input id="roas_nh" value="${esc(S.roas.wannh||'')}" placeholder="203.0.113.1" onblur="S.roas.wannh=this.value;sv()"/>
+    <button class="btn bg bsm bfull" style="margin-top:6px;" onclick="S.roas.gwid='${dv.id}';sv();showDevP('${dv.id}')">✔ Aplicar RoaS</button>`;
+  }
+  if(dv.type==='switch'||dv.type==='router'){
+    html+=`<hr class="sep"/><div style="font-size:11px;font-weight:700;margin-bottom:5px;">DHCP:</div>`;
+    html+=S.vlans.sort((a,b)=>a.vid-b.vid).map(v=>{const k=String(v.vid);if(!S.dhcp[k])S.dhcp[k]={on:false,dns:'8.8.8.8',lease:1};const c=S.dhcp[k];
+      return`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;font-size:11px;"><span style="width:6px;height:6px;border-radius:50%;background:${v.color};"></span><span style="flex:1;">V${v.vid} ${esc(v.name)}</span><select style="width:48px;font-size:11px;padding:2px;" onchange="S.dhcp['${k}'].on=this.value==='1';sv()"><option value="0" ${c.on?'':'selected'}>Off</option><option value="1" ${c.on?'selected':''}>On</option></select><input value="${esc(c.dns||'8.8.8.8')}" placeholder="DNS" style="width:82px;font-size:11px;padding:2px;" onblur="S.dhcp['${k}'].dns=this.value;sv()"/></div>`;
+    }).join('');
+  }
+  return html;
+}
+
+// ── HOST PANEL ──
+let hstFmt=null;
+function showHstP(id){
+  const hs=hstById(id);if(!hs)return;
+  const isWin=hs.os?.includes('win')||hs.os==='mac';
+  hstFmt=isWin?'win_ps':(hs.os==='mac'?'mac_sh':'linux_sh');
+  const cfg=genHstCfg(hs,hstFmt);
+  const body=`<div class="co ${isWin?'co-y':'co-g'}" style="font-size:10.5px;">${HICO[hs.os]||'💻'} <b>${HLBL[hs.os]||hs.os}</b>${hs.vref?` · VLAN ${vByRef(hs.vref)?.vid||'?'}`:''} · ${hs.sip||hs.ipm||'—'}${hs.mac?`<br>MAC: <code>${hs.mac}</code>`:''}</div>
+  <div class="tabs"><div class="tab on" data-tab="hc">Script config</div><div class="tab" data-tab="hn">Red</div><div class="tab" data-tab="he">Editar</div></div>
+  <div class="tc on" id="hc">
+    <div class="vps" id="hv_vps">${[{id:'win_ps',l:'PowerShell'},{id:'linux_sh',l:'Linux Bash'},{id:'mac_sh',l:'macOS'}].map(vf=>`<span class="vp ${hstFmt===vf.id?'on':''}" onclick="setHstFmt('${id}','${vf.id}')">${vf.l}</span>`).join('')}</div>
+    <div class="codehd"><span id="hv_fn">${esc(hs.name)}.${hstFmt==='win_ps'?'ps1':'sh'}</span><div style="display:flex;gap:4px;"><button class="btn bs bxs" onclick="navigator.clipboard?.writeText(G('hv_code').textContent).then(()=>alert('✓ Copiado'))">📋</button><button class="btn bs bxs" onclick="dlHstCfg('${id}')">⬇</button></div></div>
+    <div class="codeblk" id="hv_code" style="min-height:180px;">${esc(cfg)}</div>
+  </div>
+  <div class="tc" id="hn">${renderHstNetP(hs)}</div>
+  <div class="tc" id="he">
+    <label class="fl">Nombre</label><input id="he_n" value="${esc(hs.name||'')}"/>
+    <div class="row"><div><label class="fl">SO</label><select id="he_os">${Object.keys(HICO).map(k=>`<option value="${k}" ${hs.os===k?'selected':''}>${HICO[k]} ${HLBL[k]}</option>`).join('')}</select></div>
+    <div><label class="fl">VLAN</label><select id="he_v">${S.vlans.map(v=>`<option value="${v.id}" ${hs.vref===v.id?'selected':''}>${v.vid} ${esc(v.name)}</option>`).join('')}</select></div></div>
+    <div class="row"><div><label class="fl">IP</label><select id="he_im"><option value="dhcp" ${hs.ipm==='dhcp'?'selected':''}>DHCP</option><option value="static" ${hs.ipm==='static'?'selected':''}>Estática</option><option value="auto" ${hs.ipm==='auto'?'selected':''}>Auto</option></select></div>
+    <div><label class="fl">IP estática</label><input id="he_sip" value="${esc(hs.sip||'')}"/></div></div>
+    <div class="row"><div><label class="fl">Puerto switch</label><input id="he_sp" value="${esc(hs.swport||'')}"/></div><div><label class="fl">MAC</label><input id="he_mac" value="${esc(hs.mac||'')}"/></div></div>
+  </div>`;
+  setPanel((HICO[hs.os]||'💻')+' '+hs.name,HLBL[hs.os]||hs.os,isWin?'byw':'bgn',true,body,
+    `<button class="btn bd" onclick="sel={t:'hst',id:'${id}'};delSel()">🗑</button><button class="btn bp" onclick="saveHstEdit('${id}')">💾 Guardar</button>`);
+}
+
+function setHstFmt(hid,fmt){hstFmt=fmt;document.querySelectorAll('#hv_vps .vp').forEach(p=>p.classList.toggle('on',p.textContent==={win_ps:'PowerShell',linux_sh:'Linux Bash',mac_sh:'macOS'}[fmt]));const h=hstById(hid);if(!h)return;const e=G('hv_code');if(e)e.textContent=genHstCfg(h,fmt);const fn=G('hv_fn');if(fn)fn.textContent=`${esc(h.name)}.${fmt==='win_ps'?'ps1':'sh'}`;}
+function dlHstCfg(id){const h=hstById(id);if(!h)return;dlFile(`${h.name}.${hstFmt==='win_ps'?'ps1':'sh'}`,genHstCfg(h,hstFmt));}
+function saveHstEdit(id){const h=hstById(id);if(!h)return;h.name=G('he_n')?.value||h.name;h.os=G('he_os')?.value||h.os;h.vref=G('he_v')?.value||h.vref;h.ipm=G('he_im')?.value||h.ipm;h.sip=G('he_sip')?.value||'';h.swport=G('he_sp')?.value||'';h.mac=G('he_mac')?.value||'';sv();showHstP(id);draw();}
+
+function renderHstNetP(hs){
+  const v=vByRef(hs.vref);const sn=v?snByVR(v.id):null;const ci=sn?pcidr(sn.cidr):null;
+  let html=`<div class="co ${hs.sip?'co-g':'co-a'}">${hs.sip?`IP: <b>${hs.sip}</b>/${ci?.pf||'?'}`:hs.ipm==='dhcp'?'DHCP configurado':'Sin IP'} ${v?`<br>VLAN ${v.vid} — ${esc(v.name)}${sn?` · GW: ${sn.gw||'?'}`:''}`:''}</div>`;
+  if(!hs.sip&&sn)html+=`<button class="btn bs bsm bfull" onclick="autoAssignIP('${hs.id}')">⚡ Asignar IP automática</button>`;
+  return html;
+}
+
+function autoAssignIP(hid){
+  const h=hstById(hid);if(!h||!h.vref)return alert('Asigna una VLAN primero.');
+  const sn=snByVR(h.vref);if(!sn)return alert('Sin subnet. Usa ⚡ Subnets primero.');
+  const ci=pcidr(sn.cidr);if(!ci?.fh)return;
+  const used=new Set(S.hosts.filter(x=>x.vref===h.vref&&x.sip).map(x=>pip(x.sip)));
+  let nx=ci.fh+10;while(used.has(nx)&&nx<ci.lh)nx++;
+  if(nx>=ci.lh)return alert('Sin IPs libres.');
+  h.sip=i2s(nx);h.ipm='static';sv();showHstP(hid);draw();alert(`✓ IP asignada: ${h.sip}`);
+}
+
+// ── LINK PANEL ──
+function showLnkP(id){
+  const lk=S.links.find(x=>x.id===id);if(!lk)return;
+  const fn=lk.at==='loc'?locById(lk.aid)?.name:devById(lk.aid)?.name;
+  const tn=lk.bt==='loc'?locById(lk.bid)?.name:devById(lk.bid)?.name;
+  const body=`<div class="co co-a"><b>${esc(fn||'?')}</b> → <b>${esc(tn||'?')}</b><br>${lk.lt||'eth'} · ${lk.speed||'—'} ${lk.notes||''}</div>
+  <label class="fl">Tipo</label><select id="lk_et" onchange="S.links.find(x=>x.id==='${id}').lt=this.value;sv();draw();">${Object.keys(LCOLS).map(k=>`<option value="${k}" ${lk.lt===k?'selected':''}>${k}</option>`).join('')}</select>
+  <label class="fl">Velocidad</label><select id="lk_es" onchange="S.links.find(x=>x.id==='${id}').speed=this.value;sv();">${['100M','1G','10G','100G'].map(s=>`<option value="${s}" ${lk.speed===s?'selected':''}>${s}</option>`).join('')}</select>
+  <label class="fl">Notas</label><input id="lk_en" value="${esc(lk.notes||'')}" onblur="S.links.find(x=>x.id==='${id}').notes=this.value;sv();"/>`;
+  setPanel('🔗 Enlace',lk.lt,'bac',true,body,`<button class="btn bd bfull" onclick="delLnk('${id}');showDash()">🗑 Borrar</button>`);
+}
+
+function delVlan(id){S.vlans=S.vlans.filter(v=>v.id!==id);S.subnets=S.subnets.filter(s=>s.vref!==id);S.hosts=S.hosts.map(h=>{if(h.vref===id)h.vref=null;return h;});sv();showDash();}
+function delDev(id){S.devs=S.devs.filter(d=>d.id!==id);S.links=S.links.filter(l=>l.aid!==id&&l.bid!==id);sv();showDash();draw();}
+function delHst(id){S.hosts=S.hosts.filter(h=>h.id!==id);sv();if(sel.t==='loc')showLocP(sel.id);else showDash();draw();}
+function delLnk(id){S.links=S.links.filter(l=>l.id!==id);sv();draw();}
+
+// ── MODAL WIRING ──
+function fillLocSels(){
+  const opts=S.locs.map(l=>`<option value="${l.id}">${TICO[l.type]||'📍'} ${esc(l.name)}</option>`).join('');
+  ['d_l','h_l'].forEach(id=>{if(G(id))G(id).innerHTML='<option value="">Sin ubicación</option>'+opts;});
+}
+function fillVlanSels(){
+  const opts=['<option value="">(VLAN)</option>',...S.vlans.sort((a,b)=>a.vid-b.vid).map(v=>`<option value="${v.id}">${v.vid} — ${esc(v.name)}</option>`)].join('');
+  if(G('h_v'))G('h_v').innerHTML=opts;
+}
+function fillSwSels(){
+  const sw=S.devs.filter(d=>d.type==='switch');
+  if(G('h_sw'))G('h_sw').innerHTML=['<option value="">Sin switch</option>',...sw.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`)].join('');
+}
+
+// Location modal
+G('btnLoc').onclick=()=>om('mLoc');
+G('lok').onclick=()=>{const n=(G('lc_n').value||'').trim();if(!n)return alert('Nombre requerido.');const id=uid('loc');pend_loc={id,name:n,type:G('lc_t').value,color:G('lc_c').value,notes:G('lc_o').value};cm('mLoc');G('lc_n').value='';G('lc_o').value='';showHint('Haz clic en el canvas para colocar la ubicación');setTool('sel');};
+
+// Device modal
+G('d_ty').onchange=()=>{G('d_edge').style.display=(['router','firewall'].includes(G('d_ty').value))?'':'none';};
+G('btnDev').onclick=()=>{fillLocSels();G('d_id').value='';G('md_t').textContent='🖥 Nuevo dispositivo';G('dok').textContent='➕ Añadir';om('mDev');};
+G('dok').onclick=()=>{
+  const n=(G('d_n').value||'').trim();const v=G('d_v').value;if(!n)return alert('Nombre requerido.');if(!v)return alert('Selecciona Vendor/OS.');
+  const eid=G('d_id').value;
+  const data={name:n,type:G('d_ty').value,vendor:v,mgmt:G('d_m').value||'',locid:G('d_l').value||null,notes:G('d_o').value||'',iedge:G('d_ie').value||'no',wanif:G('d_wi').value||''};
+  if(eid){Object.assign(devById(eid)||{},data);}else{S.devs.push({id:uid('dv'),...data});}
+  cm('mDev');sv();draw();if(sel.t==='loc')showLocP(sel.id);
+};
+
+// Host modal
+G('h_im').onchange=()=>{G('h_ssec').style.display=G('h_im').value==='static'?'':'none';if(G('h_im').value==='static')upSnH();};
+G('h_v').onchange=upSnH;
+function upSnH(){const ref=G('h_v').value;if(!ref){G('h_sh').textContent='';return;}const sn=snByVR(ref);if(!sn){G('h_sh').textContent='Sin subnet para esta VLAN.';return;}const ci=pcidr(sn.cidr);G('h_sh').textContent=`${sn.cidr} · GW:${sn.gw||'?'} · ${ci?.fh?i2s(ci.fh):'?'}–${ci?.lh?i2s(ci.lh):'?'}`;}
+G('btnHost').onclick=()=>{fillLocSels();fillVlanSels();fillSwSels();G('h_id').value='';G('mh_t').textContent='💻 Nuevo host';om('mHost');};
+G('hok').onclick=()=>{
+  const n=(G('h_n').value||'').trim();if(!n)return alert('Nombre requerido.');
+  const eid=G('h_id').value;
+  const data={name:n,os:G('h_os').value,vref:G('h_v').value||null,ipm:G('h_im').value,sip:G('h_sip').value||'',swid:G('h_sw').value||null,swport:G('h_sp').value||'',mac:G('h_mac').value||'',locid:G('h_l').value||null};
+  if(eid){Object.assign(hstById(eid)||{},data);}else{S.hosts.push({id:uid('hs'),...data});}
+  cm('mHost');sv();draw();if(sel.t==='loc')showLocP(sel.id);
+};
+
+// VLAN modal
+G('btnVlan').onclick=()=>om('mVlan');
+G('vok').onclick=()=>{const vid=parseInt(G('v_id').value);if(!isFinite(vid)||vid<1||vid>4094)return alert('ID inválida.');if(S.vlans.some(v=>v.vid===vid))return alert('VLAN ya existe.');S.vlans.push({id:uid('vl'),vid,name:G('v_n').value||`VLAN${vid}`,color:G('v_c').value||VCOLS[S.vlans.length%VCOLS.length]});cm('mVlan');G('v_id').value='';G('v_n').value='';sv();showDash();};
+
+// Subnets modal
+G('btnSnAuto').onclick=()=>{if(!S.vlans.length)return alert('Crea VLANs primero.');om('mSn');};
+G('snprev').onclick=()=>{
+  const base=(G('sn_b').value||'10.10.0.0/16').trim();const pf=parseInt(G('sn_p').value||24);const bc=pcidr(base);if(!bc)return;
+  const step=2**(32-pf);let txt='';
+  for(let i=0;i<S.vlans.length;i++){const v=S.vlans.sort((a,b)=>a.vid-b.vid)[i];const net=(bc.net+i*step)>>>0;const cidr=`${i2s(net)}/${pf}`;const ci=pcidr(cidr);txt+=`VLAN ${v.vid} (${v.name}): ${cidr}  GW:${ci?.fh?i2s(ci.fh):'?'}\n`;}
+  G('sn_prev').textContent=txt||'Sin VLANs.';
+};
+G('snok').onclick=()=>{
+  const base=(G('sn_b').value||'10.10.0.0/16').trim();const pf=parseInt(G('sn_p').value||24);
+  const gwRule=G('sn_gw').value;const off=parseInt(G('sn_off').value||10);const assign=G('sn_ah').checked;
+  const bc=pcidr(base);if(!bc)return alert('Bloque base inválido.');
+  const step=2**(32-pf);let cnt=0;
+  for(let i=0;i<S.vlans.length;i++){
+    const v=S.vlans.sort((a,b)=>a.vid-b.vid)[i];
+    if(S.subnets.some(s=>s.vref===v.id))continue;
+    const net=(bc.net+i*step)>>>0;const cidr=`${i2s(net)}/${pf}`;const ci=pcidr(cidr);if(!ci)continue;
+    const gw=gwRule==='last'?(ci.lh?i2s(ci.lh):null):(ci.fh?i2s(ci.fh):null);
+    S.subnets.push({id:uid('sn'),vref:v.id,cidr,gw});cnt++;
+  }
+  if(assign){
+    for(const v of S.vlans){
+      const sn=snByVR(v.id);if(!sn)continue;const ci=pcidr(sn.cidr);if(!ci?.fh)continue;
+      const usedIPs=new Set(S.hosts.filter(h=>h.vref===v.id&&h.sip).map(h=>pip(h.sip)));
+      let nx=ci.fh+off-1;
+      for(const h of S.hosts.filter(h=>h.vref===v.id&&(!h.sip||h.ipm==='auto'))){
+        while(usedIPs.has(nx)&&nx<ci.lh)nx++;if(nx>=ci.lh)break;
+        h.sip=i2s(nx);h.ipm='static';usedIPs.add(nx);nx++;
+      }
+    }
+  }
+  cm('mSn');sv();draw();alert(`✓ ${cnt} subnets${assign?', IPs asignadas':''}.`);
+};
+
+// Link modal
+function fillLnkMdl(at,aid,bt,bid){
+  G('lk_at').value=at;G('lk_bt').value=bt;
+  const all=[...S.locs.map(l=>({id:l.id,t:'loc',n:(TICO[l.type]||'📍')+' '+l.name})),...S.devs.map(d=>({id:d.id,t:'dev',n:(DICO[d.type]||'⬡')+' '+d.name})),...S.hosts.map(h=>({id:h.id,t:'hst',n:(HICO[h.os]||'💻')+' '+h.name}))];
+  const opts=all.map(x=>`<option value="${x.id}" data-t="${x.t}">${esc(x.n)}</option>`).join('');
+  G('lk_a').innerHTML=opts;G('lk_b').innerHTML=opts;
+  G('lk_a').value=aid;G('lk_b').value=bid;
+}
+G('lkok').onclick=()=>{
+  const aid=G('lk_a').value,bid=G('lk_b').value;if(!aid||!bid||aid===bid)return alert('Selecciona origen y destino distintos.');
+  const at=G('lk_a').selectedOptions[0]?.dataset.t||G('lk_at').value||'loc';
+  const bt=G('lk_b').selectedOptions[0]?.dataset.t||G('lk_bt').value||'loc';
+  S.links.push({id:uid('lk'),at,aid,bt,bid,lt:G('lk_t').value,speed:G('lk_s').value,notes:G('lk_n').value||''});
+  cm('mLnk');G('lk_n').value='';sv();draw();showDash();
+};
+
+// Project name
+G('pname').addEventListener('input',()=>{S.proj=G('pname').value;sv();});
+G('pname').value=S.proj||'';
+G('btnNew').onclick=()=>{if(!confirm('¿Borrar todo?'))return;localStorage.removeItem(SK);Object.assign(S,defS());sv();showDash();draw();};
+G('btnExpAll').onclick=exportAll;
+
+
+// CONFIG GENERATORS
+function genFwAcl(){
+  const rules=S.fwrules.filter(r=>r.ena!==false).sort((a,b)=>(a.prio||100)-(b.prio||100));
+  if(!rules.length)return'';
+  const L=['!','ip access-list extended FW_POLICY'];
+  for(const r of rules){const act=r.act==='deny'?'deny':'permit';const proto=r.proto==='any'?'ip':r.proto;const src=r.src==='any'?'any':fmtW(r.src);const dst=r.dst==='any'?'any':fmtW(r.dst);const port=r.port&&r.port!=='any'?` eq ${r.port.split(',')[0]}`:'';L.push(` ${act} ${proto} ${src} ${dst}${port} ! ${r.name||''}`);}
+  L.push(' deny ip any any log ! implicit deny');return L.join('\n');
+}
+
+function genSwCisco(dv){
+  const sec=S.sec;
+  const L=['!',`! ${'═'.repeat(40)}`,`! ${dv.name}  |  Cisco IOS Switch`,`! ${'═'.repeat(40)}`,'configure terminal',`hostname ${(dv.name||'SW').replace(/\s/g,'-')}`,''];
+  if(S.vlans.length){L.push('! VLANs:');for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){L.push(`vlan ${v.vid}`,v.name?` name ${v.name}`:'exit');if(v.name)L.push('exit');}}
+  if(sec.ds==='yes'){const sv2=(sec.dsv||'').trim()||S.vlans.map(v=>v.vid).join(',');L.push('','! DHCP Snooping:','ip dhcp snooping',`ip dhcp snooping vlan ${sv2||'1'}`);}
+  if(sec.dai==='yes'&&S.vlans.length)L.push('','! DAI:',`ip arp inspection vlan ${S.vlans.map(v=>v.vid).join(',')}`);
+  const chosts=S.hosts.filter(h=>h.swid===dv.id);
+  if(chosts.length){L.push('','! Interfaces de acceso:');
+    for(const hs of chosts){const v=vByRef(hs.vref);const pn=hs.swport||`GigabitEthernet0/${chosts.indexOf(hs)+1}`;
+      const lines=[`interface ${pn}`,` description ${(hs.name||'host').replace(/\s/g,'-')}${hs.sip?' ('+hs.sip+')':''}`,` switchport mode access`];
+      if(v)lines.push(` switchport access vlan ${v.vid}`);
+      if(sec.bpdu==='yes'){lines.push(' spanning-tree portfast',' spanning-tree bpduguard enable');}
+      if(sec.ps==='yes'){lines.push(' switchport port-security',' switchport port-security maximum 2',' switchport port-security violation restrict',' switchport port-security mac-address sticky');}
+      if(sec.ds==='yes')lines.push(' no ip dhcp snooping trust');
+      if(sec.dai==='yes')lines.push(' no ip arp inspection trust');
+      if(sec.ipsg==='yes')lines.push(' ip verify source');
+      lines.push('no shutdown','exit','');
+      L.push(...lines);
+    }
+  } else L.push('','! Sin hosts asociados a este switch en el proyecto.');
+  const fwAcl=genFwAcl();if(fwAcl)L.push('',fwAcl);
+  L.push('!','end','write memory','!');return L.filter(x=>x!==undefined).join('\n')+'\n';
+}
+
+function genRtCisco(dv){
+  const L=['!',`! ${'═'.repeat(40)}`,`! ${dv.name}  |  Cisco IOS Router`,`! ${'═'.repeat(40)}`,'configure terminal',`hostname ${(dv.name||'R').replace(/\s/g,'-')}`,''];
+  if(S.roas.gwid===dv.id){
+    const lanIf=(S.roas.lanif||'GigabitEthernet0/1').trim();
+    if(lanIf){L.push(`interface ${lanIf}`,' no ip address',' no shutdown',' exit','');
+      for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){const sn=snByVR(v.id);if(!sn?.gw)continue;const ci=pcidr(sn.cidr);const mask=ci?msk(ci.mask):'255.255.255.0';L.push(`interface ${lanIf}.${v.vid}`,` encapsulation dot1Q ${v.vid}`,` description GW_VLAN${v.vid}`,` ip address ${sn.gw} ${mask}`,' ip nat inside',' no shutdown',' exit','');}}
+    const dhL=[];
+    for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){const k=String(v.vid);const cfg=S.dhcp[k];if(!cfg?.on)continue;const sn=snByVR(v.id);if(!sn)continue;const ci=pcidr(sn.cidr);if(!ci?.fh)continue;if(sn.gw)dhL.push(`ip dhcp excluded-address ${sn.gw}`);for(const h of S.hosts.filter(hx=>hx.vref===v.id&&hx.sip))dhL.push(`ip dhcp excluded-address ${h.sip} ! ${h.name}`);dhL.push(`ip dhcp pool VLAN${v.vid}`,` network ${i2s(ci.net)} ${msk(ci.mask)}`,sn.gw?` default-router ${sn.gw}`:'',cfg.dns?` dns-server ${cfg.dns}`:'',` lease ${cfg.lease||1}`,' exit').filter(Boolean);}
+    if(dhL.length)L.push('! DHCP Pools:',...dhL,'');
+  }
+  if(dv.iedge==='yes'&&dv.wanif){const wc=(S.roas.wancidr||'').trim();const nh=(S.roas.wannh||'').trim();if(wc){const ci=pcidr(wc);if(ci)L.push(`interface ${dv.wanif}`,` ip address ${i2s(ci.ip)} ${msk(ci.mask)}`,' ip nat outside',' no shutdown',' exit','');}if(nh)L.push(`ip route 0.0.0.0 0.0.0.0 ${nh}`,'');if(dv.wanif)L.push('access-list 100 permit ip any any',`ip nat inside source list 100 interface ${dv.wanif} overload`,'');}
+  const fwAcl=genFwAcl();if(fwAcl)L.push('',fwAcl);
+  L.push('end','write memory','!');return L.join('\n')+'\n';
+}
+
+function genJuniper(dv){
+  const sj=v=>(v.name||'v'+v.vid).replace(/[^A-Za-z0-9_-]/g,'_');
+  const L=[`# ${'─'.repeat(38)}`,`# ${dv.name}  |  Juniper Junos`,`# ${'─'.repeat(38)}`,''];
+  for(const v of S.vlans.sort((a,b)=>a.vid-b.vid))L.push(`set vlans ${sj(v)} vlan-id ${v.vid}`);
+  if(dv.type==='switch'){const ch=S.hosts.filter(h=>h.swid===dv.id);for(let i=0;i<ch.length;i++){const hs=ch[i];const v=vByRef(hs.vref);const p=hs.swport||`ge-0/0/${i}`;L.push('',`set interfaces ${p} unit 0 family ethernet-switching`,`set interfaces ${p} unit 0 family ethernet-switching port-mode access`,v?`set interfaces ${p} unit 0 family ethernet-switching vlan members ${sj(v)}`:'');}}
+  if((dv.type==='router'||dv.type==='firewall')&&S.roas.gwid===dv.id){const base=(S.roas.lanif||'ge-0/0/0').split('.')[0];L.push('');for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){const sn=snByVR(v.id);if(!sn?.gw)continue;const ci=pcidr(sn.cidr);L.push(`set interfaces ${base} unit ${v.vid} vlan-id ${v.vid}`,`set interfaces ${base} unit ${v.vid} family inet address ${sn.gw}/${ci?.pf||24}`);}}
+  return L.join('\n')+'\n';
+}
+
+function genAruba(dv){
+  const L=[`hostname "${dv.name}"`,`! Aruba AOS-S ${'─'.repeat(28)}`,''];
+  for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){L.push(`vlan ${v.vid}`,v.name?` name "${v.name.replace(/"/g,"'")}"`:'',' exit','!').filter(Boolean);}
+  for(const h of S.hosts.filter(h=>h.swid===dv.id)){const v=vByRef(h.vref);const p=h.swport||'1/1/1';L.push(`interface ${p}`,h.name?` name "${h.name}"`:'',' description "host"',v?` untagged vlan ${v.vid}`:'no untagged',' exit','!').filter(Boolean);}
+  return L.join('\n')+'\n';
+}
+
+function genPfSense(dv){
+  const L=[`# ${'─'.repeat(38)}`,`# ${dv.name}  |  pfSense`,`# WebGUI → Interfaces → VLANs`,`# ${'─'.repeat(38)}`,''];
+  const base=S.roas.lanif||'em1';
+  for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){const sn=snByVR(v.id);L.push(`# VLAN ${v.vid} (${v.name}): parent=${base} vlan-id=${v.vid} gw=${sn?.gw||'?'} net=${sn?.cidr||'?'}`);}
+  L.push('','# Reglas FW:');for(const r of S.fwrules.filter(x=>x.ena!==false).sort((a,b)=>(a.prio||100)-(b.prio||100)))L.push(`# [${(r.act||'').toUpperCase()}] ${r.src}→${r.dst} ${r.proto}:${r.port||'any'} | ${r.name||''}`);
+  return L.join('\n')+'\n';
+}
+
+function genFortigate(dv){
+  const L=[`# ${'─'.repeat(38)}`,`# ${dv.name}  |  FortiGate`,`# ${'─'.repeat(38)}`,''];
+  const base=S.roas.lanif||'port2';
+  for(const v of S.vlans.sort((a,b)=>a.vid-b.vid)){const sn=snByVR(v.id);const ci=sn?pcidr(sn.cidr):null;L.push(`config system interface`,' edit "VLAN'+v.vid+'"',`  set vdom "root"`,`  set type vlan`,`  set vlanid ${v.vid}`,`  set interface "${base}"`,`  set mode static`,`  set ip ${sn?.gw||'10.0.0.1'} ${ci?msk(ci.mask):'255.255.255.0'}`,'  set allowaccess ping ssh',' next','end','');}
+  let pn=1;for(const r of S.fwrules.filter(x=>x.ena!==false).sort((a,b)=>(a.prio||100)-(b.prio||100))){L.push(`config firewall policy`,' edit '+pn++,`  set name "${r.name||'rule'}"`,`  set action ${r.act==='deny'?'deny':'accept'}`,`  set srcaddr "${r.src==='any'?'all':r.src}"`,`  set dstaddr "${r.dst==='any'?'all':r.dst}"`,`  set service "${r.proto==='any'?'ALL':r.proto.toUpperCase()}"`,`  set logtraffic all`,' next','end','');}
+  return L.join('\n')+'\n';
+}
+
+function genWinPS(hs){
+  const v=vByRef(hs.vref);const sn=v?snByVR(v.id):null;const ci=sn?pcidr(sn.cidr):null;
+  const L=[`# ${'═'.repeat(42)}`,`# ${hs.name}  |  Windows PowerShell`,`# SO: ${HLBL[hs.os]||hs.os}`,`# VLAN: ${v?v.vid+' '+v.name:'—'}`,`# ${'═'.repeat(42)}`,'# Ejecutar como Administrador',''];
+  L.push(`$adapter = Get-NetAdapter | Where-Object {$_.Status -eq "Up"} | Select-Object -First 1`,'');
+  if(hs.sip){L.push('# ── IP estática ──','$adapter | Remove-NetIPAddress -Confirm:$false -EA SilentlyContinue','$adapter | Remove-NetRoute -Confirm:$false -EA SilentlyContinue','',`New-NetIPAddress -InterfaceIndex $adapter.ifIndex \``,`    -IPAddress "${hs.sip}" \``,`    -PrefixLength ${ci?.pf||24} \``,`    -DefaultGateway "${sn?.gw||'10.0.0.1'}"`,`Set-DnsClientServerAddress -InterfaceIndex $adapter.ifIndex \``,`    -ServerAddresses "8.8.8.8","8.8.4.4"`,'');}
+  else{L.push('# ── DHCP ──','Set-NetIPInterface -InterfaceIndex $adapter.ifIndex -Dhcp Enabled','Set-DnsClientServerAddress -InterfaceIndex $adapter.ifIndex -ResetServerAddresses','');}
+  if(hs.mac)L.push(`# MAC esperada: ${hs.mac}`,'');
+  L.push(`Rename-Computer -NewName "${(hs.name||'PC').replace(/\s/g,'-')}" -Force -EA SilentlyContinue`,'','# ── Windows Firewall ──','New-NetFirewallRule -DisplayName "Allow ICMP" -Protocol ICMPv4 -IcmpType 8 -Action Allow -Direction Inbound -EA SilentlyContinue','');
+  if(hs.os==='sv_win'){L.push('# ── Servidor Windows ──','Set-ItemProperty "HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server" -Name "fDenyTSConnections" -Value 0','Enable-NetFirewallRule -DisplayGroup "Remote Desktop"','','# IIS:','# Install-WindowsFeature -name Web-Server -IncludeManagementTools','','# Dominio:','# $cred = Get-Credential','# Add-Computer -DomainName "empresa.local" -Credential $cred -Restart','');}
+  for(const r of S.fwrules.filter(x=>x.ena!==false&&x.act!=='deny')){const port=r.port&&r.port!=='any'?r.port.split(',')[0]:null;if(port)L.push(`New-NetFirewallRule -DisplayName "${r.name||'rule'}" -Direction Inbound -Protocol ${r.proto==='any'?'TCP':r.proto.toUpperCase()} -LocalPort ${port} -Action Allow`);}
+  L.push('','# ── Verificación ──','ipconfig /all','Test-NetConnection -ComputerName 8.8.8.8 -Port 53');
+  return L.join('\n')+'\n';
+}
+
+function genLinuxSH(hs){
+  const vv=vByRef(hs.vref);const sn=vv?snByVR(vv.id):null;const ci=sn?pcidr(sn.cidr):null;
+  const nm=(hs.name||'linux').toLowerCase().replace(/[^a-z0-9-]/g,'-');
+  const ip2=hs.sip||'';const pfx=ci?ci.pf:24;const gw2=sn&&sn.gw?sn.gw:'10.0.0.1';
+  const L=['#!/bin/bash',
+    '# Host: '+(hs.name||'?')+'  |  '+(HLBL[hs.os]||hs.os),
+    '# VLAN: '+(vv?vv.vid+' '+vv.name:'--'),
+    '# '+(sn?sn.cidr+' GW:'+gw2:'sin subnet'),
+    ''];
+  L.push('# Detectar interfaz:');
+  L.push('IFACE=$(ip route show default 2>/dev/null | awk \'{print $5}\' | head -1)');
+  L.push('[ -z "$IFACE" ] && IFACE="eth0"');
+  L.push('echo "Interface: $IFACE"','');
+  if(ip2){
+    L.push('# IP estatica:');
+    L.push('ip addr flush dev $IFACE 2>/dev/null||true');
+    L.push('ip addr add '+ip2+'/'+pfx+' dev $IFACE');
+    L.push('ip link set $IFACE up');
+    L.push('ip route replace default via '+gw2);
+    L.push('echo "nameserver 8.8.8.8" > /etc/resolv.conf');
+    L.push('');
+    L.push('# Configuracion permanente (/etc/netplan/01-cfg.yaml):');
+    L.push('# network: version: 2');
+    L.push('#   ethernets: <interfaz>:');
+    L.push('#     dhcp4: no');
+    L.push('#     addresses: ['+ip2+'/'+pfx+']');
+    L.push('#     routes: [{to: default, via: '+gw2+'}]');
+    L.push('#     nameservers: {addresses: [8.8.8.8]}');
+    L.push('# netplan apply');
+    L.push('');
+  } else {
+    L.push('# DHCP:','dhclient $IFACE 2>/dev/null||true','');
+  }
+  if(hs.mac)L.push('# MAC esperada: '+hs.mac,'');
+  L.push('hostnamectl set-hostname "'+nm+'" 2>/dev/null||true','');
+  if(hs.os==='sv_linux'){
+    L.push('# Servidor Linux - actualizar:');
+    L.push('apt-get update 2>/dev/null||yum update -y 2>/dev/null||true');
+    L.push('apt-get install -y curl wget git net-tools vim ufw 2>/dev/null||true','');
+    L.push('# Firewall UFW:');
+    L.push('which ufw >/dev/null 2>&1 && ufw --force reset 2>/dev/null');
+    L.push('which ufw >/dev/null 2>&1 && ufw default deny incoming');
+    L.push('which ufw >/dev/null 2>&1 && ufw allow ssh');
+    L.push('which ufw >/dev/null 2>&1 && ufw allow 80/tcp');
+    L.push('which ufw >/dev/null 2>&1 && ufw allow 443/tcp');
+    L.push('which ufw >/dev/null 2>&1 && ufw --force enable','');
+    L.push('# SSH hardening:');
+    L.push('sed -i "s/PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config 2>/dev/null||true');
+    L.push('sed -i "s/#PasswordAuth/PasswordAuth/" /etc/ssh/sshd_config 2>/dev/null||true');
+    L.push('systemctl restart sshd 2>/dev/null||service ssh restart 2>/dev/null||true','');
+  }
+  for(const r of S.fwrules.filter(x=>x.ena!==false&&x.act!=='deny')){
+    const port=r.port&&r.port!=='any'?r.port.split(',')[0]:null;
+    if(port&&r.proto!=='any')L.push('which ufw >/dev/null&&ufw allow '+port+'/'+r.proto+'  # '+(r.name||''));
+  }
+  L.push('','# Verificacion:','ip addr show','ip route','ping -c2 -W2 8.8.8.8&&echo OK||echo NoConectividad');
+  return L.join('\n')+'\n';
+}
+function genMacSH(hs){
+  const v=vByRef(hs.vref);const sn=v?snByVR(v.id):null;const ci=sn?pcidr(sn.cidr):null;
+  const L=[`#!/bin/bash`,`# ${hs.name}  |  macOS`,''];
+  if(hs.sip){L.push(`networksetup -setmanual "Wi-Fi" ${hs.sip} ${ci?msk(ci.mask):'255.255.255.0'} ${sn?.gw||'10.0.0.1'}`,`networksetup -setdnsservers "Wi-Fi" 8.8.8.8 8.8.4.4`);}
+  else{L.push('networksetup -setdhcp "Wi-Fi"');}
+  L.push('',`scutil --set HostName "${(hs.name||'mac').toLowerCase().replace(/\s/g,'-')}"`,`scutil --set ComputerName "${hs.name||'mac'}"`,`ifconfig en0`);
+  return L.join('\n')+'\n';
+}
+
+function genHstCfg(hs,fmt){
+  if(!fmt)fmt=hs.os?.includes('win')?'win_ps':(hs.os==='mac'?'mac_sh':'linux_sh');
+  if(fmt==='win_ps')return genWinPS(hs);if(fmt==='mac_sh')return genMacSH(hs);return genLinuxSH(hs);
+}
+
+function genDevCfg(dv,fmt){
+  if(!fmt)fmt=dv.vendor||'cisco_ios';
+  if(fmt==='cisco_ios')return dv.type==='switch'?genSwCisco(dv):genRtCisco(dv);
+  if(fmt==='cisco_asa')return genRtCisco(dv);
+  if(fmt==='juniper')return genJuniper(dv);
+  if(fmt==='aruba')return genAruba(dv);
+  if(fmt==='pfsense')return genPfSense(dv);
+  if(fmt==='fortinet')return genFortigate(dv);
+  if(fmt==='win_ps')return genWinPS({name:dv.name,os:'sv_win',sip:dv.mgmt,ipm:'static',vref:null});
+  if(fmt==='linux_sh')return genLinuxSH({name:dv.name,os:'sv_linux',sip:dv.mgmt,ipm:'static',vref:null});
+  return genSwCisco(dv);
+}
+
+function dlFile(fn,txt){const b=new Blob([txt],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}
+
+function exportAll(){
+  let bundle='';
+  for(const dv of S.devs){const cfg=genDevCfg(dv);const ext=dv.vendor==='juniper'?'set.txt':dv.vendor?.startsWith('pfsense')||dv.vendor==='fortinet'?'conf':'cfg';dlFile(`${dv.name}.${ext}`,cfg);bundle+=`\n${'#'.repeat(48)}\n# ${dv.name}\n${'#'.repeat(48)}\n\n${cfg}\n`;}
+  for(const hs of S.hosts){const isW=hs.os?.includes('win')||hs.os==='mac';dlFile(`${hs.name}.${isW?'ps1':'sh'}`,genHstCfg(hs));}
+  dlFile('topology.json',JSON.stringify(S,null,2));
+}
+
+// INIT
+function init(){
+  resizeCv();
+  if(!S.locs.length&&!S.devs.length&&!S.hosts.length){
+    const l1=uid('loc'),l2=uid('loc');const d1=uid('dv'),d2=uid('dv'),d3=uid('dv');
+    const h1=uid('hs'),h2=uid('hs');const v1=uid('vl'),v2=uid('vl');
+    S.locs.push({id:l1,name:'Oficina Principal',type:'building',color:'#0a2050',x:80,y:90});
+    S.locs.push({id:l2,name:'CPD / Servidores',type:'rack',color:'#1a1a08',x:400,y:90});
+    S.devs.push({id:d1,name:'SW-ACC-01',type:'switch',vendor:'cisco_ios',locid:l1});
+    S.devs.push({id:d2,name:'FW-EDGE',type:'firewall',vendor:'cisco_ios',iedge:'yes',wanif:'GigabitEthernet0/0',locid:l2});
+    S.devs.push({id:d3,name:'SW-CORE',type:'switch',vendor:'cisco_ios',locid:l2});
+    S.hosts.push({id:h1,name:'PC-Ventas-01',os:'pc_win',locid:l1,swid:d1,ipm:'dhcp',vref:v1});
+    S.hosts.push({id:h2,name:'SRV-Web',os:'sv_linux',locid:l2,ipm:'static',sip:'10.10.20.10',vref:v2});
+    S.vlans.push({id:v1,vid:10,name:'Usuarios',color:'#00c8f0'});
+    S.vlans.push({id:v2,vid:20,name:'Servidores',color:'#00d98a'});
+    S.links.push({id:uid('lk'),at:'loc',aid:l1,bt:'loc',bid:l2,lt:'fiber',speed:'10G',notes:'Backbone'});
+    S.roas.gwid=d2;S.roas.lanif='GigabitEthernet0/1';
+    sv();
+  }
+  G('pname').value=S.proj||'Mi red';
+  showDash();draw();
+}
+init();
+
+</script>
+</body>
+</html>
