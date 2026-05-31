@@ -1,0 +1,10 @@
+{
+  "categoria": "Redes",
+  "icono": "🌐",
+  "etiquetas": ["redes", "node", "networking", "herramienta"],
+  "descripcion": "Versión o módulo relacionado con NetWizard para herramientas de redes con Node.",
+  "demo": "",
+  "destacado": false,
+  "orden": 7,
+  "ocultar": false
+}
